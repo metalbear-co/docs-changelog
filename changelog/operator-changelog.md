@@ -767,6 +767,8 @@ description: >-
 
 ## 3.95.1 - 2024-09-12
 
+No significant changes.
+
 
 ## 3.95.0 - 2024-09-11
 
@@ -1359,6 +1361,8 @@ description: >-
 
 ## 3.67.0 - 2023-09-18
 
+No significant changes.
+
 
 ## 3.65.2 - 2023-09-11
 
@@ -1381,8 +1385,12 @@ No significant changes.
 
 ## 3.62.0 - 2023-08-27
 
+No significant changes.
+
 
 ## 3.61.0 - 2023-08-22
+
+No significant changes.
 
 
 ## 3.60.0 - 2023-08-21
