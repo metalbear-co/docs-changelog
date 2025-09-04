@@ -1,0 +1,4 @@
+root: ./changelog/
+
+structure:
+  summary: ./SUMMARY.md
