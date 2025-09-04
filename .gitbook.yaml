@@ -1,0 +1,5 @@
+root: ./
+
+​structure:
+  summary: SUMMARY.md​
+  readme: configuration/README.md
