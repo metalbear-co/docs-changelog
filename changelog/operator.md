@@ -13,6 +13,43 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.125.0 - 2025-09-11
+
+
+### Added
+
+- Add option to disable waiting for patched pods when starting queue splitting
+  sessions.
+
+  A new global operator configuration option
+  `queue_splitting_wait_for_ready_target` has been added to control whether the
+  operator waits for patched pods to become ready when starting Kafka/SQS
+  splitting sessions. This option defaults to `true` (maintaining existing
+  behavior) but can be set to `false` to speed up session start time in
+  environments where pod readiness waiting is not necessary or causes delays
+  due to cluster conditions.
+
+  Configuration:
+  - Environment variable: `OPERATOR_QUEUE_SPLITTING_WAIT_FOR_READY_TARGET`
+  - Command line flag: `--queue-splitting-wait-for-ready-target`
+  - Default: `true` (waits for ready pods)
+- Report SQS splitting metrics to prometheus.
+- The license server now logs the loaded license at startup.
+
+
+### Changed
+
+- Changed MySQL database branch's maximum TTL to 15 minutes.
+
+
+### Fixed
+
+- Fixed a bogus error log related to the `TargetWatch` task.
+- Fixed a bug in the ArgoCD Rollout restart logic.
+- Improved the formatting for license server usage reports, including tab names
+  and number display formats.
+
+
 ## 3.124.0 - 2025-09-02
 
 
