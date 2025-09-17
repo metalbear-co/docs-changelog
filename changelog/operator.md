@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-09-11T00:00:00.000Z
+lastmod: 2025-09-17T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,27 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.126.0 - 2025-09-16
+
+
+### Added
+
+- Added support for using an HTTP filter in traffic mirroring.
+
+
+### Changed
+
+- Create an empty database using the name in db brnaching configuration.
+- `MirrordSqsSession` resources now have 4 random letters in their name.
+
+
+### Fixed
+
+- Fixed an issue where the operator was not detecting conflicts between
+  identical `any_of` HTTP filters.
+- `MirrordSqsSession` resources that failed to start were not being deleted.
+
 
 ## 3.125.0 - 2025-09-11
 
