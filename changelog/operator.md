@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-09-17T00:00:00.000Z
+lastmod: 2025-10-06T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,37 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.127.0 - 2025-10-06
+
+
+### Removed
+
+- Removed the legacy method of exposing user session statistics with the
+  `mirrordoperatoruser` resource.
+  Usage can be tracked with the license server.
+
+
+### Added
+
+- Added a warning when an agent is slow to spawn (taking longer than 5
+  seconds).
+
+
+### Changed
+
+- Adjusted log levels for various reconcilation logs produced by the operator.
+- Changed the way how the operator creates empty MySQL database if
+  a database name is given by the user. The operator now spawns the
+  branch DB pod with a init container which creates the empty database.
+  The new approach works around potential network policy that limits
+  cross-namespace connections.
+
+
+### Fixed
+
+- Fix `OperatorSessionInfo::hostname` to return the actual hostname.
+
 
 ## 3.126.0 - 2025-09-16
 
