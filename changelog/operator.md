@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-10-09T00:00:00.000Z
+lastmod: 2025-10-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,28 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.128.0 - 2025-10-21
+
+
+### Added
+
+- Added Kafka splitting info to the operator status.
+
+
+### Changed
+
+- API calls to MetalBear's servers (e.g: fetching the operator's license) now
+  have a timeout, avoiding infinite hangs when the requests can't complete
+  because of network settings.
+- Improved logs for lingering temporary SQS queues.
+- Updated the SQS empty-queue check, according to the SQS docs.
+
+
+### Fixed
+
+- Fixed a bogus error log related to `SingleWatchTask`.
+
 
 ## 3.127.1 - 2025-10-09
 
