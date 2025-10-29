@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-10-22T00:00:00.000Z
+lastmod: 2025-10-29T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,20 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.129.0 - 2025-10-29
+
+
+### Added
+
+- Added multiple data copy modes for bootstrapping a MySQL branch.
+
+
+### Fixed
+
+- Fixed a bug in the `scaledown` feature.
+- Operator status not showing data for SQS split queues.
+
 
 ## 3.128.0 - 2025-10-21
 
