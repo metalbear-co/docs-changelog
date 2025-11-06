@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-10-29T00:00:00.000Z
+lastmod: 2025-11-06T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,15 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.129.1 - 2025-11-05
+
+
+### Fixed
+
+- Fixed a bug where the operator was overloading the Kubernetes API server with
+  PATCH requests for `MirrordClusterSessions`.
+
 
 ## 3.129.0 - 2025-10-29
 
