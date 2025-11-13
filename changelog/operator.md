@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-11-06T00:00:00.000Z
+lastmod: 2025-11-13T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,14 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.129.2 - 2025-11-13
+
+
+### Added
+
+- Added readiness probe in MySQL branch pod.
+
 
 ## 3.129.1 - 2025-11-05
 
