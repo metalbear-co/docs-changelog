@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-11-20T00:00:00.000Z
+lastmod: 2025-12-04T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,27 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.131.0 - 2025-12-04
+
+
+### Added
+
+- Added PostgreSQL branching.
+- Added a functional log in license server after each session ends.
+
+
+### Changed
+
+- Changed operator image to be distroless.
+- The operator now always uses mutating webhooks for patching targets.
+
+
+### Fixed
+
+- Fixed a bug where operator was reconciling unused `MirrordClusterSession`s
+  too rarely.
+
 
 ## 3.130.0 - 2025-11-19
 
