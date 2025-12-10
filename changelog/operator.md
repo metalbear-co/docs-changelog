@@ -13,6 +13,13 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.132.1 - 2025-12-10
+
+
+### Fixed
+
+- The docker image will now correctly print the license upon startup
+
 ## 3.132.0 - 2025-12-10
 
 
