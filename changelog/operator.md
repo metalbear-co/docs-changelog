@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-12-04T00:00:00.000Z
+lastmod: 2025-12-10T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,25 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.132.0 - 2025-12-10
+
+
+### Added
+
+- Added security context config for agent pod.
+  [#agent-config.security-context](https://github.com/metalbear-co/operator/issues/agent-config.security-context)
+- SQS splitting sessions can now be recovered and resumed after operator
+  restart.
+- Support for the protocol messages introduced in the newest mirrord version
+  has been added, which enable using the `ftruncate` and `futimens` libc functions.
+
+### Fixed
+
+- Ignore `fchown` and `fchmod` requests from the layer for security reasons.
+- SQS messages were filtered wrong when the body was JSON and SNS support was
+  enabled.
+
 
 ## 3.131.0 - 2025-12-04
 
