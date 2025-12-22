@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-12-10T00:00:00.000Z
+lastmod: 2025-12-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,22 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.133.0 - 2025-12-21
+
+
+### Added
+
+- Added the `CiController` to the operator (handles mirrord sessions started
+  with mirrord ci start). Also added ci session handling to the backend
+  (license-server sql now has a new table for bookkeeping of mirrord sessions
+  started from ci, and routes that interact with this table).
+
+
+### Fixed
+
+- fix openapi v2/v3 spec leading to terraform failing
+
 
 ## 3.132.1 - 2025-12-10
 
