@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-12-22T00:00:00.000Z
+lastmod: 2025-12-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,26 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.134.0 - 2025-12-24
+
+
+### Added
+
+- Added `envFrom` as a new type of connection source in DB branching.
+
+
+### Changed
+
+- Enable iptables cleanup on startup by default (instead of erroring out if
+  there are leftover rules).
+
+
+### Fixed
+
+- Fixed an issue with operator's APIService availability with multiple
+  replicas.
+
 
 ## 3.133.0 - 2025-12-21
 
