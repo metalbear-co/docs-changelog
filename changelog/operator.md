@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2025-12-24T00:00:00.000Z
+lastmod: 2026-01-06T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,16 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.135.0 - 2026-01-06
+
+
+### Added
+
+- Support for limiting outgoing connections from mirrord sessions using a
+  kubernetes policy has been added to the operator.
+- We now log a warning every time a license with an expired issuer is loaded.
+
 
 ## 3.134.0 - 2025-12-24
 
