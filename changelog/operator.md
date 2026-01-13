@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-01-07T00:00:00.000Z
+lastmod: 2026-01-13T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,24 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.136.0 - 2026-01-13
+
+
+### Changed
+
+- Allow bypassing user credentials check when the session is started from
+  mirrord ci start.
+
+
+### Fixed
+
+- Fixed `Session` verbs exposed in operator's `APIResourceList` - replaced
+  `list` with `deletecollection`.
+- Fixed an issue where `kubectl get v1.operator.metalbear.co.targets` could
+  hang indefinitely in some Kubernetes setups.
+- Fixed staled copy target state cleanup.
+
 
 ## 3.135.1 - 2026-01-06
 
