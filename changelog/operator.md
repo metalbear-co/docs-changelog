@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-01-13T00:00:00.000Z
+lastmod: 2026-01-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,31 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.137.0 - 2026-01-23
+
+
+### Added
+
+- Add support for db branches IAM.
+- Added CI cert verification bypass feature in operator status feature list.
+- Db Branching support for MongoDB.
+- SQS splitting sessions are now recovered transparently, without restarting
+  the target workload again.
+
+
+### Fixed
+
+- Added test that checks scaledown feature of `copy_target`
+- Changed leader election logic to drop leadership only after all background
+  tasks are done.
+- Fixed potential database corruption at license server shutdown.
+- Outgoing network connections will now only request reverse DNS lookups to the
+  agent when the user has configured hostname-based outgoing network policies.
+  This prevents reverse DNS lookup failures from spamming the logs when they
+  aren't even required in the first place.
+- Reduced log spam from `operator_session::ci_controller`.
+
 
 ## 3.136.0 - 2026-01-13
 
