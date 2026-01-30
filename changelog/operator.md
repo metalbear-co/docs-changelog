@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-01-24T00:00:00.000Z
+lastmod: 2026-01-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,23 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.138.0 - 2026-01-30
+
+
+### Added
+
+- Added agent metrics (currently only for bypassed requests) to the operator
+  metrics.
+- The operator now propagates OTel context (`baggage`, `traceparent` headers)
+  in http requests. Also, traces and logs can now be exported to URLs given in the 
+  operator environment (`OTLP_LOGS_URL`, `OTLP_TRACES_URL`).
+
+
+### Changed
+
+- SQS error logs that originate in AWS SQS service errors now include the
+  original error.
 
 ## 3.137.0 - 2026-01-23
 
