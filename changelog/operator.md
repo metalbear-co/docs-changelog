@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-01-30T00:00:00.000Z
+lastmod: 2026-02-06T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,23 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.139.0 - 2026-02-06
+
+
+### Changed
+
+- Add concurrent ci sessions count to `mirrord operator status`.
+- operator now emits as user_id the hashed k8s user (k8s user + salt of org id)
+  to analytics
+
+
+### Fixed
+
+- Fixed an issue that json log config flag is ignored.
+- Fixed an issue where the operator was using wrong images for branch pod init
+  containers.
+
 
 ## 3.138.0 - 2026-01-30
 
