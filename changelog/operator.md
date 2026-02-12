@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-09T00:00:00.000Z
+lastmod: 2026-02-12T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,17 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.140.1 - 2026-02-12
+
+
+### Fixed
+
+- Changed duration key to `session_duration` in Session End log as documented.
+- Fixed bogus warning on OTEL propagation.
+- Reduced per-session memory usage.
+- Added IAM auth for Multi Cluster.
+
 
 ## 3.140.0 - 2026-02-09
 
