@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-12T00:00:00.000Z
+lastmod: 2026-02-16T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,25 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.141.0 - 2026-02-16
+
+
+### Added
+
+- Added `format=json` option to `GET /api/v1/reports/usage` endpoint for admin
+  dashboard metrics.
+- Operator will now suspend flux resources when there's an active workload
+  patch that rescales its target.
+
+
+### Fixed
+
+- Child session can become stale and never cleaned when using multi cluster.
+- Multi Cluster sessions were never cleaned when they Fail.
+- Single cluster session was always checking for parent session before it was
+  created.
+
 
 ## 3.140.1 - 2026-02-12
 
