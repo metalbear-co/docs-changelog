@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-16T00:00:00.000Z
+lastmod: 2026-02-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,35 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.142.0 - 2026-02-19
+
+
+### Added
+
+- Added more `debug` and `warn` logs when resolving librdkafka configuration
+  for Kafka splitting.
+- Added operator admin dashboard for visualizing utilization metrics.
+- DB Branching pods limits are now configurable. Aligned all limits to be same
+  for all db branching pods as baseline.
+- Added feature for injecting `Mirrord-Session-Key` headers into HTTP requests.
+- mirrord now supports "Preview Environments" - a new type of mirrord session
+  that lives directly in the cluster and can be shared with other users.
+
+
+### Changed
+
+- Lowered log level for `TooManyRequests` errors originating from Kubernetes
+  watch streams.
+  Such errors are quite common at operator startup.
+- Use proper LicenseKey rather than license hash for ci routes.
+
+
+### Fixed
+
+- When targeting a StatefulSet with `copy_target`, the copy will now correctly
+  mount volumes from PersistentVolumeClaims, fixing failed Pod creation.
+
 
 ## 3.141.0 - 2026-02-16
 
