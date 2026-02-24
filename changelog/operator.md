@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-19T00:00:00.000Z
+lastmod: 2026-02-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,21 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.143.0 - 2026-02-24
+
+
+### Added
+
+- Add multi cluster session to the CLI status.
+- The `mirrord preview status` command will now show the remaining TTL of each
+  preview environment session.
+
+
+### Fixed
+
+- Update reqwest dependency - should solve trusting custom TLS if user provides
+
 
 ## 3.142.0 - 2026-02-19
 
