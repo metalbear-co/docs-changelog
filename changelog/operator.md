@@ -13,6 +13,15 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.143.1 - 2026-02-24
+
+
+### Fixed
+
+- Fixed a issue where operator telemetry sender strip license server address.
+- Fixed preview environment's "request was dropped" error when intercepting
+  incoming traffic.
+
 ## 3.143.0 - 2026-02-24
 
 
