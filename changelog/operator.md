@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-24T00:00:00.000Z
+lastmod: 2026-02-26T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,19 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.144.0 - 2026-02-26
+
+
+### Added
+
+- Support for jq filters for SQS splitting.
+
+
+### Changed
+
+- Provide better guidance on what to do on port lock conflict
+
 
 ## 3.143.1 - 2026-02-24
 
