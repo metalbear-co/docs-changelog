@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-02-26T00:00:00.000Z
+lastmod: 2026-03-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,26 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.145.0 - 2026-03-02
+
+
+### Added
+
+- You can now update the configuration and/or image of an existing preview
+  environment session by re-running `preview start` with the same key, target,
+  image registry and image repository.
+- The `feature.preview.ttl_mins`/`--ttl` setting for preview environments now
+  accepts the `"infinite"` string value, which makes the session live
+  indefinitely until being manually stopped.
+
+
+### Fixed
+
+- Fixed an issue where session message processing could get stuck, leaving 
+  a persistent port lock that could not be released without restarting 
+  the mirrord operator.
+
 
 ## 3.144.0 - 2026-02-26
 
