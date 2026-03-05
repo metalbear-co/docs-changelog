@@ -13,6 +13,20 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.147.0 - 2026-03-05
+
+
+### Changed
+
+- Make db branching type to be optional, now it always checks for env and
+  env_from.
+
+
+### Fixed
+
+- Fix env_from for db params.
+- Fixed some bogus warning and error logs.
+
 ## 3.146.0 - 2026-03-04
 
 
