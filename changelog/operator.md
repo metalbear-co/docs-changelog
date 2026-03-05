@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-03T00:00:00.000Z
+lastmod: 2026-03-05T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,15 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.146.0 - 2026-03-04
+
+
+### Added
+
+- SQS splitting now supports message attribute injection using the existing key
+  feature.
+
 
 ## 3.145.0 - 2026-03-02
 
