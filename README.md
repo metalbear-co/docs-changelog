@@ -2,7 +2,7 @@
 
 This repo contains the source for the mirrord docs site [Changelog tab](https://metalbear.com/mirrord/docs/changelog). It uses [GitBook](https://gitbook.com/) to generate documentation from markdown.
 
-> **NOTE** that the mirrord docs' other tabs are synced to the [docs](https://github.com/metalbear-co/docs) and [docs-configuration](https://github.com/metalbear-co/docs-configuration) repos.
+> **NOTE** that the mirrord docs' other tabs are synced to the [docs repo](https://github.com/metalbear-co/docs) and [the mirrord repo docs branch](https://github.com/metalbear-co/mirrord/tree/docs).
 
 ### Structure
 
