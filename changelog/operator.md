@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-05T00:00:00.000Z
+lastmod: 2026-03-09T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,13 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.148.0 - 2026-03-09
+
+
+### Added
+
+- Added integration with the Java Kafka sidecar.
 
 ## 3.147.0 - 2026-03-05
 
