@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-09T00:00:00.000Z
+lastmod: 2026-03-10T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,13 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.148.1 - 2026-03-10
+
+
+### Fixed
+
+- MySQL branch init fails when tables have foreign key dependencies.
 
 ## 3.148.0 - 2026-03-09
 
