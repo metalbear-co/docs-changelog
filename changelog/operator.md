@@ -13,6 +13,13 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.148.2 - 2026-03-10
+
+
+### Fixed
+
+- Fixed issues with Kafka splitting using the librdkafka client.
+
 ## 3.148.1 - 2026-03-10
 
 
