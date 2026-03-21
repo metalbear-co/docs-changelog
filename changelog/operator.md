@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-10T00:00:00.000Z
+lastmod: 2026-03-21T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,39 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.149.0 - 2026-03-21
+
+
+### Added
+
+- Dashboard tables now have resizable columns using @metalbear/ui.
+- Add support for JQ-powered header filters
+- Preview environment's usage is now collected through our telemetry system
+- Preview environments now respect the cluster's incoming traffic policies.
+- Session keys will now be injected into HTTP responses as well (in addition to
+  requests).
+
+
+### Changed
+
+- Add mirrord for ci when license-server is not set up, by using the metalbear
+  backend.
+- Added a CI flag in operator session event to differentiate regular sessions
+  from CI sessions. As a result, CI runners who are identified by
+  MIRRORD_CI_API_KEY will not be counted as active users.
+- In SQS, the session key header will now be called `mirrord-key` (instead of
+  `X-Mirrord-Key`) to match injected header names in regular HTTP
+  requests/responses and HTTP conventions.
+- Preview environment's incoming traffic router is now more robust, reutilizing
+  mirrord's existing `intproxy` logic instead of reimplementing it from
+  scratch.
+
+
+### Fixed
+
+- Fixed detection of message attributes in FIFO SNS envelopes.
+
 
 ## 3.148.2 - 2026-03-10
 
