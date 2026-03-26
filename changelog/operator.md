@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-21T00:00:00.000Z
+lastmod: 2026-03-26T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,16 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.150.0 - 2026-03-26
+
+
+### Added
+
+- Operator now sends agent spawn errors in telemetry.
+- Support setting labels/annotations on preview pods using
+  operator.preview.labels and operator.preview.annotations in the chart.
+
 
 ## 3.149.0 - 2026-03-21
 
