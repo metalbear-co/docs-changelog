@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-26T00:00:00.000Z
+lastmod: 2026-03-29T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,37 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.151.0 - 2026-03-28
+
+
+### Added
+
+- Added operator errors reporting. Error events retention period can be
+  configured with `.server.retention.operatorErrors` (defaults to 30 days).
+  Error reports are accessible at  `/api/v1/reports/errors`.
+- Preview environments now support DB branching and queue splitting.
+- Preview environments now support `feature.network.incoming.ignore_ports`.
+- Preview environments now support environment variable manipulation
+  (`feature.env`).
+- Support for Copy Target for Multi Cluster.
+
+
+### Changed
+
+- OpenAPI schema is generated once and serves an etag to allow caching
+- Removed API group and resource pairs that don't exist from cluster role
+  template.
+
+
+### Fixed
+
+- Fixed a minor issue where `license.key` is read for CI counting purpose even
+  for regular sessions.
+- Fixed incorrect YAML indentation for extraVolumes in the mirrord-operator
+  deployment template.
+- Fixed protobuf openapi endpoint failing due to schema change introduced.
+
 
 ## 3.150.0 - 2026-03-26
 
