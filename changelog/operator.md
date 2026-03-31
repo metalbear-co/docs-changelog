@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-29T00:00:00.000Z
+lastmod: 2026-03-31T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,16 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.152.0 - 2026-03-31
+
+
+### Added
+
+- Added Support for RabbitMQ splitting. This includes new `queueType` for
+  `MirrordWorkloadQueueRegistry` resource and new `MirrordPropertyList`
+  resource to save connection and queue properties.
+
 
 ## 3.151.2 - 2026-03-29
 
