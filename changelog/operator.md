@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-03-31T00:00:00.000Z
+lastmod: 2026-04-09T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,39 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.154.0 - 2026-04-09
+
+
+### Changed
+
+- Preview environments no longer override the labels/annotations from the
+  target's pod spec.
+  As a side effect of this change, pods created by preview environments will
+  never be in the "Ready" state, this is intentional.
+- mirrord-agent pods and ephemeral container specs now use both `command` and
+  `args` instead of just `command`. This is to enable allowlisting with
+  [WorkloadAllowlists](https://docs.cloud.google.com/kubernetes-engine/docs/reference/crds/workloadallowlist).
+
+## 3.153.0 - 2026-04-07
+
+
+### Added
+
+- Branch database status now includes the created pod name.
+- Preview env support for Multi Cluster.
+
+
+### Fixed
+
+- ArgoCD does not like empty array values so we remove them when generating the
+  schema.
+- Preview environments can now target StatefulSets that contain `volumeMount`s
+  in their spec.
+- Removed default values in chart templates that makes ArgoCD sync failure
+- Value in helm chart of tls.apiService.insecureSkipTLSVerify can cause
+  perpetual diff in ArgoCD sync fixed
+- some Helm compatability issues resolved
 
 ## 3.152.0 - 2026-03-31
 
