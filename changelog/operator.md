@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-04-09T00:00:00.000Z
+lastmod: 2026-04-16T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,29 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.155.0 - 2026-04-16
+
+
+### Changed
+
+- Adapt text of operator to use mirrord sessions
+- Preview environments now ignore the config option
+  `feature.network.incoming.http_filter.ports` to prevent accidentally stealing
+  traffic without a filter. This means that all HTTP filters now
+  unconditionally apply to all intercepted ports.
+- Replaced the purple accent line under the operator dashboard's AppBar with a
+  subtle top highlight and a theme-appropriate bottom border, matching the
+  direction in the session monitor.
+
+
+### Fixed
+
+- Fixed MySQL branch database init failing on older MySQL images (e.g. 5.7) by
+  building `mysql-branch-init` against glibc 2.17.
+- Fixed SQS splitting in multi-cluster failing when the queue filter uses a
+  wildcard (`*`).
+- Fixed bogus error logs printed when preview environments are not disabled.
 
 ## 3.154.0 - 2026-04-09
 
