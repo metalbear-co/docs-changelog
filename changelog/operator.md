@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-04-19T00:00:00.000Z
+lastmod: 2026-04-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,23 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.157.0 - 2026-04-24
+
+
+### Added
+
+- Support for composite environment variables (with value_pattern regex) and
+  multi source connection parameters in db branching.
+- Support for pure value credentials in db branching.
+
+
+### Fixed
+
+- DB branch credentials from a literal value or Secret reference now override
+  the local env vars correctly, even when the target pod does not set them.
+- Leftover sessions for clusters that do not exist in the registry no longer
+  crash the operator during cleanup.
 
 ## 3.156.0 - 2026-04-19
 
