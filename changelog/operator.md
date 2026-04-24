@@ -13,6 +13,8 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.157.1 - 2026-04-24
+
 ## 3.157.0 - 2026-04-24
 
 
