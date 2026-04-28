@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-04-24T00:00:00.000Z
+lastmod: 2026-04-28T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,8 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.157.2 - 2026-04-28
 
 ## 3.157.1 - 2026-04-24
 
