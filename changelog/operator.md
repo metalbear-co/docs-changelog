@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-04-28T00:00:00.000Z
+lastmod: 2026-04-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,9 +13,46 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.158.0 - 2026-04-30
+
+
+### Added
+
+- Added support for GCP Pub Sub.
+- Support for single cluster sessions in Multi Cluster.
+
+
+### Changed
+
+- Cluster-wide Secret permissions for db branching are now gated behind
+  `operator.dbBranchingLiteralCredentials` (defaults to `true`).
+
+
+### Fixed
+
+- Fixed `mirrord dump` failing in multi-cluster setups with 2+ workload
+  clusters due to duplicate protocol responses from the multi-cluster router.
+- Fixed queue splitting timeout on StatefulSet targets when `IsolatePods`
+  restart strategy is enabled. StatefulSets now always use the `Standard`
+  restart strategy, since `IsolatePods` relies on orphaning pods from their
+  ReplicaSet, which does not apply to StatefulSets.
+- Update RMQ splitting logic so if there are 2 entries with the same name but
+  different cluster then both clusters will have a split queue and forwarder
+  up.
+- When splitting multiple Kafka topics on the same workload, the target pod now
+  restarts only once instead of once per topic. All topics share a single
+  `MirrordClusterWorkloadPatchRequest`.
+- kafka ignore transient auth errors
+
 ## 3.157.2 - 2026-04-28
 
+No significant changes.
+
+
 ## 3.157.1 - 2026-04-24
+
+No significant changes.
+
 
 ## 3.157.0 - 2026-04-24
 
