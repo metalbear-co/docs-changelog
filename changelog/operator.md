@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-04-30T00:00:00.000Z
+lastmod: 2026-05-10T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,25 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.159.0 - 2026-05-10
+
+
+### Added
+
+- Surface preview environments alongside normal sessions in
+  `MirrordOperator.status.sessions` so existing clients (`mirrord ls`, `mirrord
+  ui`, browser extension) list them without a separate code path.
+
+
+### Fixed
+
+- Fixed URL path formatting in MetalBear API client.
+- Kafka splitting issue with multiple sessions split the same topics.
+- The `APIService` no longer flips to `FailedDiscoveryCheck` after the
+  cluster's front-proxy `CA` rotates. The operator now reloads its `TLS` client
+  verifier when `kube-system/extension-apiserver-authentication` changes.
+- kafka auth on MSK/AWS with pod identity failing after some time
 
 ## 3.158.0 - 2026-04-30
 
