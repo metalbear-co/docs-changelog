@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-10T00:00:00.000Z
+lastmod: 2026-05-11T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,26 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.160.0 - 2026-05-11
+
+
+### Security
+
+- Set container-level security contexts for the operator Deployment to run as
+  non-root and drop all Linux capabilities.
+
+
+### Changed
+
+- Update `injectSessionKeyHeader` doc comment to mention HTTP responses and SQS
+  messages.
+
+
+### Fixed
+
+- Dashboard now respects the license seat tracking mode when displaying user
+  identifiers, instead of always preferring the Kubernetes username.
 
 ## 3.159.0 - 2026-05-10
 
