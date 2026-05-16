@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-11T00:00:00.000Z
+lastmod: 2026-05-16T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,36 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.161.0 - 2026-05-16
+
+
+### Added
+
+- Add support for `Azure Servicebus` queue splitting.
+- The operator now listens on IPv6 by default for both the kube API/webhook
+  port and the Prometheus metrics endpoint, with an automatic IPv4 fallback
+  when the primary bind fails. Configurable via `OPERATOR_FALLBACK_ADDR` and
+  `OPERATOR_METRICS_FALLBACK_ADDR`.
+
+
+### Changed
+
+- Add the max concurrent CI session count within a time frame to the license
+  server usage report.
+- Changes how we display the user name from `identifier` (an id like
+  `jx73h371ha9`) to `client_username` (`meowjesty`, when this name is
+  available).
+
+
+### Fixed
+
+- Added missing `branchcredentials` create permission to the
+  `mirrord-operator-user` ClusterRole.
+- Check if the ci finalizer has been removed before logging the ci_controller
+  cleanup BUG message.
+- Fixed a bug where the configured keepalive period of unused mirrord-agents
+  was not respected.
 
 ## 3.160.0 - 2026-05-11
 
