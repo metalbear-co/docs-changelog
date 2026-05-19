@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-16T00:00:00.000Z
+lastmod: 2026-05-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,24 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.162.0 - 2026-05-19
+
+
+### Added
+
+- Add `iam` auth for `mysql`.
+- Add support for unified queue splitting `azure` + `gcp` for preview env.
+- Added `authType: aks` for multi-cluster authentication using Azure Workload
+  Identity. The operator can now authenticate to remote `AKS` clusters.
+
+
+### Fixed
+
+- Fixed db branching session env overrides when all connection params use
+  literal values or secret sources. The overrides incorrectly returned the
+  source database credentials instead of the branch pod's connection details,
+  causing the app to connect to the source database instead of the branch.
 
 ## 3.161.0 - 2026-05-16
 
