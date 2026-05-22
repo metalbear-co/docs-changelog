@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-19T00:00:00.000Z
+lastmod: 2026-05-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,38 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.163.0 - 2026-05-22
+
+
+### Added
+
+- Added support to license-server with multiple replicas. (Including support
+  for postgres database)
+- Added total count and session duration metrics for CI and preview.
+- Preview environments are now resilient to pod crashes and evictions.
+- Preview environments now support mounting user-supplied files in the preview
+  pod via a new `spec.config_mounts` field on `PreviewSession`.
+
+
+### Changed
+
+- Preview sessions are now deleted automatically when their TTL expires, and
+  failed sessions are cleaned up automatically after the retention window
+  configured by `operator.preview.cleanupAfterMins` in the chart configuration.
+  Alongside this change, `mirrord preview status` now only shows active
+  sessions by default, and a new `--failed` flag lets you inspect failed
+  sessions that haven't been cleaned up yet.
+
+
+### Fixed
+
+- Fixed an issue where the operator was printing bogus error logs related to
+  listing PreviewSession resources.
+- Kafka splitting no longer fails with `MessageSizeTooLarge` when the original
+  topic has a `max.message.bytes` limit above 1 MB. The forwarder producer's
+  client-side cap is lifted, and ephemeral (fallback and session) topics now
+  inherit `max.message.bytes` from the original topic.
 
 ## 3.162.0 - 2026-05-19
 
