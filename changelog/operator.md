@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-22T00:00:00.000Z
+lastmod: 2026-05-27T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,29 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.164.0 - 2026-05-27
+
+
+### Added
+
+- Adds support for optional parsing of S3 event notifications in SQS/SNS
+  messages. S3 object metadata is exposed to jq filters via S3Metadata.
+
+
+### Fixed
+
+- Branch database pods now always use a static mock password instead of the
+  source database password.
+- Fixed branch pod password mismatch when password source is a Secret without
+  `env_var_name`.
+- GCP Pub/Sub queue splitting now copies source subscription and topic settings
+  onto temporary resources instead of using Pub/Sub defaults.
+- On licenses using `KubernetesUser` seat tracking, copy-target and
+  multi-cluster sessions now consume seats by k8s username, matching regular
+  sessions. Previously these paths keyed seats on the client certificate, so a
+  single user across ephemeral containers or multiple machines consumed
+  multiple seats and reported as multiple users in analytics.
 
 ## 3.163.0 - 2026-05-22
 
