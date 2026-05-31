@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-27T00:00:00.000Z
+lastmod: 2026-05-31T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,38 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.165.0 - 2026-05-31
+
+
+### Added
+
+- Added support for seqpacket outgoing connections.
+- Added support for using an existing ServiceAccount in the mirrord Operator
+  Helm chart.
+- Preview environments now can be temporarily "paused" by a local `mirrord
+  exec` session configured to use the same target + key as the preview session.
+  While the local session is active incoming traffic won't be directed torwards
+  the preview session and the preview pod won't exist, so no outgoing traffic
+  is produced either. When the local session ends, the preview environment is
+  automatically unpaused.
+- Preview environments now survive operator restarts, means that your active
+  preview sessions will survive operator upgrades. Note that the session's TTL
+  is still respected even across restarts.
+
+
+### Changed
+
+- Env var to control accepting client certs so you can ignore certs when
+  stealing TLS traffic.
+
+
+### Fixed
+
+- Fixed a transient error during queue splitting where patched resource owner
+  reference update error would cause the split to not work.
+- Reduced the log noise produced by the preview environment seat controller on
+  `preview stop` command.
 
 ## 3.164.0 - 2026-05-27
 
