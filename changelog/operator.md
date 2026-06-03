@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-05-31T00:00:00.000Z
+lastmod: 2026-06-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,24 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.166.0 - 2026-06-03
+
+
+### Added
+
+- Added an option to migrate the data from local sqlite to postgress.
+- Include the client's mirrord CLI version in the Session Start functional log.
+- Preview environments can now control the number of pod replicas in a session
+  through the new `feature.preview.replicas` option.
+
+
+### Fixed
+
+- Fixed `value_pattern` regex not being applied when the init container
+  connects to the source database.
+- Kafka splitting no longer stops forwarding messages between sessions. The
+  forwarder stays subscribed as long as the split is alive.
 
 ## 3.165.0 - 2026-05-31
 
