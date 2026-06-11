@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-03T00:00:00.000Z
+lastmod: 2026-06-11T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,66 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.167.0 - 2026-06-11
+
+
+### Added
+
+- A new `mirrord-operator-ci` role has been added, which can be used to manage
+  permissions for machine sessions (e.g: `mirrord ci` and `mirrord preview`) in
+  CI runners.
+- Add an "Export all data" action under Settings in the admin dashboard that
+  downloads the full license-server history as a ZIP of CSV files: usage
+  metrics, users, targets, session activity, CI, friction action items,
+  operator errors, trends, and the adoption directory.
+- Added `tls.useExistingSecret` to the operator Helm chart, which mounts the
+  secret named by `tls.secret` without the chart creating it (e.g. when it's
+  provisioned by an ExternalSecret).
+- Azure Service Bus topic queue splitting now uses native Service Bus
+  subscription rules, so topics are split without creating a temporary topic..
+- DB Branching with PostgreSQL now supports copying data from PostgreSQL
+  database over cloud-sql-proxy
+- PostgreSQL database branching now supports source instances reached through a
+  Cloud SQL Auth Proxy sidecar: when the target pod runs the proxy and
+  `gcp_cloud_sql` IAM auth is configured, the branch init container starts its
+  own proxy so it can load data from the instance. The init proxy inherits the
+  target proxy's private-IP setting, so private-only instances work as well.
+- Preview Environments now fail to start when the deployed pods or their
+  containers fail, crash or otherwise raise an error, such as failing to pull
+  the image, instead of silently succeeding to create the session without
+  reporting that something went wrong.
+- The admin dashboard now surfaces adoption friction. Connection attempts the
+  operator refuses (policy denials, missing or unauthorized targets, disabled
+  features, license errors, ...) are reported as ranked action items showing
+  the reason, the specific policy/feature/target, and how many distinct users
+  each one blocks, so an admin can see exactly what to fix to help their team
+  adopt.
+- The operator Helm chart now supports `agent.extraEnv` for adding environment
+  variables to agent pods.
+
+
+### Fixed
+
+- Fixed OpenShift SCC template using hardcoded namespace and service account
+  name instead of Helm release values, causing agent pods to be rejected by SCC
+  when the operator is installed in a namespace other than "mirrord" or with a
+  custom service account name.
+- Fixed a postgres query failure when getting active CI sessions.
+- Fixed the admin dashboard All Time Metrics table showing a user as `unknown`
+  when their sessions carried no client username; it now falls back to the
+  user's Kubernetes identity instead of letting the `unknown` placeholder mask
+  it.
+- Fixed the dashboard SAML proxy not forwarding the authenticated user to the
+  license server: `X-Remote-User` was sourced from `REMOTE_USER`, which
+  `mod_auth_mellon` does not expose as a CGI env var, so the header was never
+  set and the dashboard could not load any data after a successful SAML login.
+  It is now sourced from the `MELLON_NAME_ID` env var the module does export.
+- When doing Kafka splitting set `min.insync.replicas=1` on created ephemeral
+  topic.
+- `MirrordKafkaTopicsConsumer` now requires exactly one of `groupIdSources` or
+  `applicationIdSources` to be set, returning a validation error instead of an
+  internal server error when both are absent.
 
 ## 3.166.0 - 2026-06-03
 
