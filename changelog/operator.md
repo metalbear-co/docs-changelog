@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-11T00:00:00.000Z
+lastmod: 2026-06-14T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,41 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.168.0 - 2026-06-14
+
+
+### Added
+
+- Add `POST /v1/dashboard/directory` to upload a directory snapshot, returning
+  an import report with per-reference skip reasons.
+- Add support for `Redis Pub/Sub`.
+- Add support for redis with `location: remote`.
+- Add the adoption tab to the admin dashboard: org tree scoping, per-group
+  adoption funnel, trend, team heatmap, champions, and per-service usage, all
+  driven by the directory and operator-session data.
+- Added an option to specify a fallback string for the Kafka topic name when
+  the expected environment variable does not exist in the workload.
+- Added support for splitting [Temporal](https://temporal.io/) task queues
+  (experimental/unstable).
+- Temporal queue splitting can now filter on headers, search attributes, memo,
+  and input for both activity and workflow tasks. `jq_filter` runs against a
+  decoded task document exposing these fields (input is under `.input`, and a
+  `task_type` field marks `activity` vs `workflow`), and `message_filter`
+  supports `header.<name>` and search attribute keys.
+- The license server now supports AWS IAM authentication for RDS database
+  connections, enabled via the `DATABASE_AWS_RDS_AUTH` environment variable
+  (`.Values.database.auth.awsIam=true` via Helm).
+- mirrord-license-server chart: optional Cloud SQL Auth Proxy sidecar
+  (`database.cloudSqlProxy`) for connecting to a GCP Cloud SQL Postgres
+  instance with IAM authentication.
+
+
+### Fixed
+
+- Fix path for `temporal` emulator for `mc`.
+- Fixed an issue where the operator was not able to run queue splitting with
+  Kafka clusters configured to use namespace-local broker names.
 
 ## 3.167.0 - 2026-06-11
 
