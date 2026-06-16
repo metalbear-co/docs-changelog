@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-14T00:00:00.000Z
+lastmod: 2026-06-16T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,41 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.169.0 - 2026-06-16
+
+
+### Added
+
+- Added a `valuePattern` field to queue splitting `appConfig` references.
+
+
+### Changed
+
+- GCP Pub/Sub errors now include the attempted operation and target resource,
+  so permission failures report which call was denied instead of a generic
+  `PERMISSION_DENIED`.
+- Migrating `SQS` to the unified `CRDs` and unfiiying more logic between queue
+  splitting services.
+- Utilization dashboard's SAML proxy now uses an image from
+  ghcr.io/metalbear.co.
+- mirrord admin dashboard: the adoption view is now off by default and opt-in
+  via the `dashboard.adoptionEnabled` chart value (it requires the Postgres
+  backend). When off, the Adoption tab and its directory/service-ownership
+  upload sections in Settings are hidden, so deployments on other backends no
+  longer surface adoption UI that only returns errors. The frontend learns
+  whether the feature is on via a new GET /api/v1/dashboard/config endpoint.
+
+
+### Fixed
+
+- Fixed two HTTP 500s in the utilization report (GET /api/v1/reports/usage):
+  one when a user had mirrord sessions with no recorded duration (null
+  aggregate), and one when the selected time range had equal start and end
+  (division by zero). The per-user query now counts all sessions, treats
+  missing durations as zero time, and guards the daily-average division. Also
+  replaced the dev-only "kubectl proxy" error hint shown when the dashboard
+  fails to load.
 
 ## 3.168.0 - 2026-06-14
 
