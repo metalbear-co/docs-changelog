@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-16T00:00:00.000Z
+lastmod: 2026-06-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,55 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.170.0 - 2026-06-19
+
+
+### Added
+
+- Add `/events` endpoint for `mirrord subscribe` (only HTTP and azure events
+  supported).
+- Added a `url` property to the RabbitMQ `MirrordPropertyList`, allowing
+  connection details (host, port, vhost, username, password, scheme, SASL
+  mechanism) to be supplied as a single AMQP URI. Individually set properties
+  still take precedence over values parsed from the URL.
+- Added a deployment-level option to rewrite how user identifiers are displayed
+  on the utilization dashboard (for example, stripping an identity-provider
+  prefix such as `keycloak:`), configured via the chart rather than in-app, and
+  stopped surfacing raw identifiers (such as certificate fingerprints) next to
+  resolved user names.
+- Added configurable `pg_dump` and `mysqldump` arguments for PostgreSQL and
+  MySQL database branches.
+
+
+### Changed
+
+- Migrating `Kafka` queue splitting to the unified `operator-queue-splitting`
+  crate and `CRDs`.
+- Migrating `RabbitMQ` queue splitting to the unified
+  `operator-queue-splitting` crate and `CRDs`.
+- mirrord admin dashboard: addressed product review of the adoption view —
+  consistent active-left bucket order across both charts, swapped the
+  distribution and per-group sections, moved bucket definitions into hover
+  tooltips with a compact legend, consistent section title at any hierarchy
+  depth, and clearer wording on the current-totals note.
+- mirrord admin dashboard: group types in the directory upload are now
+  free-form labels. The dashboard derives the hierarchy from the uploaded
+  relationships and shows each org their own vocabulary instead of the
+  previously fixed bu / cio_domain / team set.
+
+
+### Fixed
+
+- Fix edge case where old active `CRDs` with the `*` selctor were not migrated
+  correctly.
+- Fixed PostgreSQL branch creation failing when the source schema references
+  roles missing on the branch. The source roles are now recreated as empty
+  placeholders before the schema is restored.
+- mirrord admin dashboard: fixed the directory join diagnostic suggesting
+  display names instead of kubernetes usernames, added template downloads to
+  the adoption onboarding checklist, clarified team-scoped engineer stats on
+  service views, and several small copy and accessibility fixes.
 
 ## 3.169.0 - 2026-06-16
 
