@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-19T00:00:00.000Z
+lastmod: 2026-06-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,22 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.171.0 - 2026-06-22
+
+
+### Changed
+
+- The adoption dashboard's trend chart now reflects the selected scope:
+  filtering to a team (or any group) shows that group's "% active over time"
+  instead of the org-wide series.
+
+
+### Fixed
+
+- Azure Service Bus queue splitting now authenticates with the operator pod's
+  Azure Workload Identity when the property list sets only
+  `fully_qualified_namespace`.
 
 ## 3.170.0 - 2026-06-19
 
