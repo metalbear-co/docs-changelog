@@ -13,6 +13,39 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.173.0 - 2026-06-24
+
+
+### Added
+
+- Multi-cluster queue splitting now handles the
+  `operator.metalbear.co/skip-mc-sync` label on `MirrordSplitConfig` and
+  `MirrordPropertyList`. When set to `true`, the operator does not broadcast
+  that resource from the primary to the remote clusters, so users who deploy
+  these CRDs to every cluster themselves.
+
+
+### Fixed
+
+- Fixed a batch of adoption dashboard scoping and edge-case issues: the header
+  counts (engineers / services / teams) now reflect the selected scope instead
+  of always showing company totals; the funnel's "vs company average"
+  comparison now appears when scoping to a business unit, not only a single
+  team; the active-users trend now plots zero-activity days instead of dropping
+  them and can no longer read above 100%; the service list no longer shows an
+  empty page after filtering; the heatmap shows a clear message when a scope
+  has no teams; and the user-classification tooltips were corrected, with
+  "going cold" alerts now also flagging long-abandoned teams.
+- Fixed the adoption dashboard's team comparison chart collapsing back to the
+  top-level group view when you scoped to a single team. Scoping to a leaf team
+  now keeps the chart at its parent level (e.g. "Teams in Engineering") with
+  the selected team outlined, while the rest of the page scopes to that team.
+  The scope filter also no longer shows an empty "No options" dropdown once you
+  reach a team with no sub-groups.
+- Queue splitting `drainTimeout` works as follows: absent value waits
+  indefinitely for the fallback queues to drain, and `0` tears down immediately
+  so the workload env patch reverts as soon as no sessions remain.
+
 ## 3.172.0 - 2026-06-23
 
 
