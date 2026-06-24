@@ -13,6 +13,18 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.174.0 - 2026-06-24
+
+
+### Changed
+
+- Azure Service Bus queue splitting now includes Azure's response body in its
+  REST errors and logs failed entity operations, so a failure like a missing
+  topic is debuggable. A `NotFound` while creating the operator's ingest
+  subscription is now reported as a clear "topic not found" message that points
+  at the topic name and the Service Bus namespace to check, instead of a bare
+  "resource not found" on an internal subscription name.
+
 ## 3.173.0 - 2026-06-24
 
 
