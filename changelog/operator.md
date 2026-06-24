@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-22T00:00:00.000Z
+lastmod: 2026-06-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,16 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.172.0 - 2026-06-23
+
+
+### Added
+
+- `GCP Pub/Sub` queue splitting now  `ack_deadline_seconds`,
+  `message_retention_seconds`, and `expiration_seconds` keys from a queue's
+  `queueConfig` `MirrordPropertyList`, letting you configure the temporary
+  subscriptions.
 
 ## 3.171.0 - 2026-06-22
 
