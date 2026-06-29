@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-24T00:00:00.000Z
+lastmod: 2026-06-29T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,43 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.175.0 - 2026-06-29
+
+
+### Added
+
+- Added a "Never started" list to the adoption dashboard's engineer-activity
+  row and the group detail dialog, surfacing engineers who have never run a
+  mirrord session by name. Previously they only appeared as an aggregate count.
+- The operator's license key can now be set to a Google Secret Manager secret
+  name using the new `license.keyGsmRef` option on the Helm chart.
+
+
+### Changed
+
+- Polished the adoption dashboard: a single gradual colour scale, shared across
+  the funnel, team heatmap, group comparison and services and ordered
+  worst-to-best left-to-right; reworded the suggested actions; the scope filter
+  now shows the full group-type label; and the header uses a crisp logo in dark
+  mode.
+- The adoption dashboard API now attributes each service to the teams whose
+  engineers actually used it in a session (derived from operator session
+  events), in addition to the teams it was explicitly assigned to, so a team
+  with active sessions is no longer reported as owning zero services it
+  demonstrably used.
+
+
+### Fixed
+
+- Fixed the adoption trend chart showing less history on the "All" range than
+  on shorter ranges, and the group detail dialog now counts the services a team
+  actually used in sessions rather than only those explicitly assigned to it.
+- Legacy SQS `MirrordWorkloadQueueRegistry` splits again honor
+  `operator.sqsSplittingLingerTimeout` as their default drain timeout when they
+  do not carry their own.
+- Preview Environments no longer fail to start when targetting a workload
+  containing multiple containers that expose the same port.
 
 ## 3.174.0 - 2026-06-24
 
