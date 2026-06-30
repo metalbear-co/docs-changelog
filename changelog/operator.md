@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-29T00:00:00.000Z
+lastmod: 2026-06-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,50 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.176.0 - 2026-06-30
+
+
+### Added
+
+- Added a `POST /v1/defects` license-server endpoint that ingests defect events
+  in batches (upsert by id, so a detector can retry without creating
+  duplicates), feeding the deployments dashboard backend.
+- Added a `POST /v1/deployments` license-server endpoint that records deploy
+  events (upsert by id), the first slice of the deployments dashboard backend.
+- Added support for Kafka events to `mirrord subscribe` (Kafka Streams not
+  supported).
+- Added support for SQS to `mirrord subscribe`.
+
+
+### Changed
+
+- Dashboard: the CSV export is now a button in the top header bar (next to
+  settings) instead of only inside the settings panel, and the adoption heatmap
+  shows each team's size next to its name (same font) instead of tucked in the
+  bottom-left corner.
+- More adoption and usage dashboard refinements: choose the trend-chart
+  interval (daily / weekly / bi-weekly / monthly) per selected range, dismiss
+  suggested actions, hover any status colour to see its meaning and count, the
+  usage tab now says "Service" instead of "Target" and shows each engineer's
+  team, and the ROI calculator pre-fills the developer count from your data.
+- Updated adoption tab copy (bucket labels and tooltips) to match the design
+  review.
+
+
+### Fixed
+
+- Azure Service Bus topic splitting no longer fails to start when its ingest
+  subscription already exists.
+- Copy target sessions now apply jq message filters for SQS, GCP Pub/Sub and
+  Azure Service Bus queue splits.
+- Fixed two dashboard search issues: the Session Activity search now matches
+  users by display name (not just the raw identifier), and search inputs no
+  longer show a duplicate clear button (the browser's native search "x" is
+  suppressed in favor of the component's own).
+- Queue splitting and other session features now work through ingress proxies
+  (e.g. GKE Connect Gateway) that reject the encoded connect URL query string,
+  by accepting the connect parameters in a header.
 
 ## 3.175.0 - 2026-06-29
 
