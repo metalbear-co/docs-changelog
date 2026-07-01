@@ -13,6 +13,36 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.178.0 - 2026-07-01
+
+
+### Added
+
+- Added a Deployments tab to the dashboard (gated by `deploymentsEnabled`):
+  coverage and defect-reduction KPIs, staging-defect-rate and defects-prevented
+  trends, a per-team defect-rate breakdown, recommended actions, and a
+  per-deployment detail table showing whether each release was tested with
+  mirrord first (Covered / Uncovered / Unmatched).
+- The mirrord Operator can now authenticate to the mirrord cloud with a
+  dedicated, rotatable, revocable API key, separate from the license. Generate
+  and manage it from the dashboard, then provide it to the chart via the new
+  `cloud.apiKey` value — either inline (`key`), a Kubernetes secret (`keyRef`),
+  or a Google Secret Manager reference (`gsmRef`). The Operator exchanges the
+  key for short-lived tokens to call the cloud. When unset, the Operator keeps
+  authenticating with its license key, so existing installs are unaffected
+  until they opt in.
+
+
+### Fixed
+
+- Azure Service Bus topic splitting no longer fails to start when its ingest
+  subscription or routing rules already exist from a crashed, aborted, or
+  quickly retried prior session; the existing resources are now adopted
+  instead.
+- Fix sessions receiving messages from unspecified queues.
+- Fixed DB branching params mode defaults for when host is not passed in
+- Fixed MYSQL had no defaults previously.
+
 ## 3.177.0 - 2026-06-30
 
 
