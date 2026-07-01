@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-06-30T00:00:00.000Z
+lastmod: 2026-07-01T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,22 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.177.0 - 2026-06-30
+
+
+### Added
+
+- Added a `dashboard.deploymentsEnabled` Helm option (off by default) that
+  gates the dashboard's deployments view, wiring
+  `DASHBOARD_DEPLOYMENTS_ENABLED` into the license server and requiring
+  `database.kind=postgres`, mirroring the existing adoption view gate.
+- The PostgreSQL branch initializer now applies `connectionSettings`.
+
+
+### Fixed
+
+- Fix `mirrord operator session kill` suggestion syntax.
 
 ## 3.176.0 - 2026-06-30
 
