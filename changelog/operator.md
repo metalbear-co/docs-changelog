@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-01T00:00:00.000Z
+lastmod: 2026-07-02T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,41 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.179.0 - 2026-07-02
+
+
+### Added
+
+- Added a list form for the `split_queues` config so the same queue id can be
+  used more than once across different broker types.
+- Added a queue-splitting status API that serves a live, namespaced view of
+  active split sessions from the operator's in-memory state, surfaced to users
+  through `mirrord queues`. Each session reports its target, owner, and
+  requested filters, plus a status with the lifecycle phase, the concrete
+  queues resolved from the target (topic / consumer group / queue /
+  subscription per broker), and per-pod patched/ready state. On the primary
+  cluster the view also aggregates split sessions from all connected clusters.
+- Added support for DynamoDB database branching. Configure it under
+  `feature.db_branches` with `type: dynamodb` and enable it with the
+  `operator.dynamodbBranching` Helm option.
+- Added the `GET /v1/dashboard/deployments` endpoint that powers the
+  deployments view: per-deployment mirrord coverage (Covered / Uncovered /
+  Unmatched), defect attribution to the most recent prior deploy of the same
+  service and env, per-team defect rates, coverage and defect-reduction KPIs,
+  and trend series. Postgres-only.
+- operator Helm chart: `cloud.apiKey` value (`key` / `keyRef` / `gsmRef`) to
+  configure the operator's cloud API key — the default credential for
+  authenticating to the mirrord cloud and obtaining the license over the API
+  (RFC 0008).
+
+
+### Fixed
+
+- Fixed multi-cluster CRD sync failing with a 409 conflict when the source
+  resource carried the `kubectl.kubernetes.io/last-applied-configuration`
+  annotation from a client-side `kubectl apply`. The broadcast sync now strips
+  it before applying to remote clusters.
 
 ## 3.178.0 - 2026-07-01
 
