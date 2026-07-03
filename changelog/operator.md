@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-02T00:00:00.000Z
+lastmod: 2026-07-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,15 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.179.1 - 2026-07-03
+
+
+### Fixed
+
+- Fixed multi-cluster CRD broadcast sync failing with a 409 conflict when a
+  resource on a remote cluster had fields owned by another field manager (e.g.
+  from a past client-side `kubectl apply`).
 
 ## 3.179.0 - 2026-07-02
 
