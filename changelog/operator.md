@@ -13,6 +13,39 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.181.0 - 2026-07-05
+
+
+### Changed
+
+- operator Helm chart: a cloud API key (`cloud.apiKey.key` / `keyRef` /
+  `gsmRef`) now satisfies the credential requirement, so the operator can be
+  installed without any `license.*` source — it obtains the license over the
+  API (RFC 0008).
+
+
+### Fixed
+
+- operator: `helm uninstall` no longer hangs or strands operator CRs. The
+  chart's `pre-delete` cleanup Job now deletes all operator CRs first — letting
+  the still-running operator execute their finalizers, and stripping the
+  finalizers of any stragglers after a bounded grace — and only then deletes
+  the CRDs and the operator. Previously it deleted the CRDs first, which shut
+  the operator down mid-cleanup (watch streams breaking is treated as a
+  critical error) and could leave CRs stuck `Terminating`, blocking the
+  uninstall indefinitely.
+- operator: on shutdown, clear the session-TTL finalizer from
+  `MirrordClusterSession`s that are already being deleted, so an exiting
+  operator no longer strands them — and the sessions CRD — stuck in
+  `Terminating`. Live sessions keep the finalizer: in an HA deployment the
+  surviving replicas keep honouring the deletion-delay TTL, and live sessions
+  present at uninstall are cleaned up by the chart's `pre-delete` hook.
+- operator: the queue-splitting workload-splits task now exits on graceful
+  shutdown instead of stalling it for the full 15s limit. The stall kept the
+  terminating leader pod (and its leadership lease) alive, leaving the operator
+  leaderless long enough for reconnecting clients to lose their sessions during
+  a rolling upgrade.
+
 ## 3.180.0 - 2026-07-05
 
 
