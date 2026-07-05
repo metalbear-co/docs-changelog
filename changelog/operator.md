@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-03T00:00:00.000Z
+lastmod: 2026-07-05T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,36 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.180.0 - 2026-07-05
+
+
+### Added
+
+- Added Cloud SQL Auth Proxy support for MySQL database branching. When the
+  target pod reaches a GCP Cloud SQL MySQL instance only through a loopback
+  Auth Proxy sidecar, the branch init container now starts its own proxy to
+  copy schema and data, matching the existing PostgreSQL behavior.
+- Added support for fetching database branching connection parameters from
+  Google Secret Manager. The branch init container fetches the secret at
+  data-copy time using the target pod's service account (Workload Identity) via
+  Application Default Credentials, so the operator never reads the secret and
+  needs no extra permissions.
+- Dashboard: a Settings tab to generate, view, and revoke the operator API key
+  (RFC 0008).
+
+
+### Changed
+
+- Updated `kube-rs` to 4.0. The Kubernetes client now falls back to the
+  OS-native trust store via the rustls platform verifier when no CA is
+  configured, instead of bundled webpki roots.
+
+
+### Fixed
+
+- Clean up split resoures when the configuration is deleted.
+- Preview sessions now expand the `"*"` wildcard in `split_queues`.
 
 ## 3.179.1 - 2026-07-03
 
