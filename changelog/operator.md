@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-05T00:00:00.000Z
+lastmod: 2026-07-08T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,45 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.182.0 - 2026-07-08
+
+
+### Added
+
+- Add support for ClickHouse.
+- Add support for Google Spanner.
+- Added BullMQ support to `mirrord subscribe`.
+- Added support for RabbitMQ to `mirrord subscribe`
+- Implement Flyway migrations.
+- Operator telemetry now reports a stable per-cluster identifier (the UID of
+  the `default` namespace), so events can be grouped by the cluster they
+  originate from. **This requires an additional RBAC permission:** the operator
+  ClusterRole now needs `get` on the `default` namespace. The bundled Helm
+  chart adds this automatically; if you manage the operator's RBAC yourself,
+  grant `get` on the `default` namespace or the identifier will be omitted.
+- The operator Helm chart now accepts an optional `operator.clusterName`. When
+  set, the operator reports this human-friendly name on its startup telemetry
+  events, so the cluster shows up with a recognizable label (instead of only an
+  opaque identifier) in the license server and the mirrord cloud.
+- Wired up GCP PubSub queue splitting to `mirrord subscribe`.
+
+
+### Changed
+
+- Dashboard onboarding: revamped the getting-started wizard into a full-screen
+  flow with a required operator step (generate an API key, install the
+  operator, and verify it via usage) ahead of the CLI step, deriving progress
+  from live usage instead of local storage (RFC 0008).
+
+
+### Fixed
+
+- Fixed cluster-scoped queue split sessions (and their temporary broker
+  resources) leaking after a preview environment was stopped. The split session
+  is now tracked by an annotation rather than an owner reference to the
+  namespaced preview session, so the operator cleans it up when the preview
+  session is gone.
 
 ## 3.181.0 - 2026-07-05
 
