@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-08T00:00:00.000Z
+lastmod: 2026-07-13T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,55 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.183.0 - 2026-07-13
+
+
+### Security
+
+- Added a `Strict-Transport-Security` (HSTS) header to management dashboard
+  responses, so browsers only ever connect over HTTPS and cannot be downgraded
+  to plaintext HTTP.
+
+
+### Added
+
+- Add Multi Cluster support for Preview Env Queue Splitting.
+- Add `mTLS` support for `Temporal` queue splitting.
+- Add a retryable agent error variant.
+- Add support for generic db branching.
+- Added Redis Pub/Sub support to mirrord subscribe.
+- Added `feature.preview.secret_mounts` to mount files into a preview pod from
+  a Kubernetes Secret, so sensitive files can be access-controlled via RBAC
+  separately from the session.
+- Added an operator API to list active mirrord sessions, cluster-wide or scoped
+  to a namespace (`GET /sessions`, `GET /namespaces/{namespace}/sessions`).
+- Added support for jq filters in Kafka queue splitting (`jq_filter` in the
+  mirrord config). The jq program runs on a JSON representation of each Kafka
+  message (`topic`, `partition`, `offset`, `timestamp`, `key`, `payload`, and
+  `headers`), so sessions can filter on fields inside the message body.
+  Combined with a header filter, a message must match both. Not supported with
+  the Java Kafka client sidecar.
+- Allow sharing preview environments.
+- Queue splitting support for mirror mode (`queue_mode: mirror`), delivering
+  matched messages to both the session and the deployed application.
+
+
+### Changed
+
+- Add queue splitting support for mirrord up.
+
+
+### Fixed
+
+- A database branch whose engine is disabled in the operator's configuration is
+  now marked `Failed` with a clear reason, instead of staying `Pending` forever
+  and leaving the CLI to time out waiting for it to become ready.
+- Fixed `multi-cluster` envoy RBAC probe.
+- Fixing dangling resources for `ASB`.
+- Helm chart no longer prints a spurious "Missing license key" warning on
+  install/upgrade when the operator is configured with only a cloud API key
+  (`cloud.apiKey`).
 
 ## 3.182.0 - 2026-07-08
 
