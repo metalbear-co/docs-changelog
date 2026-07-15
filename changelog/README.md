@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-13T00:00:00.000Z
+lastmod: 2026-07-14T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,29 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.184.0 - 2026-07-14
+
+
+### Added
+
+- Added testing for INT-380
+- Inject `mirrord-key` into all forwarded messages.
+- It's now possible to create extra objects alongside the
+  operator/license-server helm installations using the `extraObjects` field.
+- Preview environments can now selectively filter which labels are copied from
+  the target through the `feature.preview.labels.{include,exclude}` options,
+  analogous to our existing `feature.env.{include,exclude}` options.
+- Redis branch pods can now run TLS-enabled custom images.
+- Support CronJob and Job database branching targets.
+
+
+### Fixed
+
+- DB branching now reports a clear error when required source database
+  credential environment variables are missing.
+- Fix `ASB` same subscription name config.
+- Fixed copy target with an HTTP filter reliably stealing matching requests.
 
 ## 3.183.0 - 2026-07-13
 
