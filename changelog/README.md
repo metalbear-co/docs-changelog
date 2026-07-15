@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-14T00:00:00.000Z
+lastmod: 2026-07-15T00:00:00.000Z
 draft: false
 images: []
 weight: 100
