@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-15T00:00:00.000Z
+lastmod: 2026-07-17T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,28 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.185.0 - 2026-07-17
+
+
+### Added
+
+- Add support for db params with value pattern in preview env.
+- Added idle mode for preview environments (`feature.preview.idle`).
+
+
+### Changed
+
+- Renamed `feature.preview.idle.timeout_secs` to `sleep_after_secs`.
+
+
+### Fixed
+
+- Fixed `mirrord operator session kill` and `kill-all` not killing
+  multi-cluster sessions, and `operator status` showing an id `kill` rejects.
+- Fixed operator API requests intermittently failing when running more than one
+  replica, after a restart.
+- Fixed orphaned Azure Service Bus subscriptions.
 
 ## 3.184.0 - 2026-07-14
 
