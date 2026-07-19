@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-17T00:00:00.000Z
+lastmod: 2026-07-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,18 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.185.1 - 2026-07-19
+
+
+### Fixed
+
+- A queue splitting session whose `jq_filter` exceeds its evaluation time limit
+  is now cancelled with an error, instead of staying alive while silently never
+  matching a message. Applies to every queue type that supports jq filters:
+  SQS, Kafka, GCP Pub/Sub, Azure Service Bus, Redis Pub/Sub, BullMQ, and
+  Temporal.
+- Idle previews waking on other services' messages.
 
 ## 3.185.0 - 2026-07-17
 
