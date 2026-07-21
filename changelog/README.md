@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-19T00:00:00.000Z
+lastmod: 2026-07-21T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,24 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.186.0 - 2026-07-21
+
+
+### Added
+
+- Add CockroachDB database branching support.
+- Add MariaDB database branching support.
+- Added IRSA support for AWS RDS branching.
+- Operator now servces a no-session diagnostic endpoint used by `mirrord
+  diagnose latency` command.
+- Support a custom image per DB branch via the `image` field in the mirrord
+  config (all db types), restrictable with the per-database
+  `dbPod.allowedImages` Helm value.
+- `operator.extraEnv` in the mirrord-operator chart now accepts mapped values,
+  making it possible to
+  define environment variables using `valueFrom` to access the Kubernetes
+  downward API.
 
 ## 3.185.1 - 2026-07-19
 
