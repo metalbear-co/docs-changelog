@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-21T00:00:00.000Z
+lastmod: 2026-07-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,13 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.186.1 - 2026-07-22
+
+
+### Fixed
+
+- Fix multicluster split queue handoff.
 
 ## 3.186.0 - 2026-07-21
 
