@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-22T00:00:00.000Z
+lastmod: 2026-07-23T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,26 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.187.0 - 2026-07-23
+
+
+### Added
+
+- DB branch migrations support user-provided images and image-native Flyway.
+
+
+### Fixed
+
+- Added a warning when the `isolatePods` restart strategy is configured for a
+  StatefulSet target,
+  which uses the standard restart strategy instead.
+- Fixed MySQL/MariaDB branch migrations failing when the branch image creates
+  no remote root user.
+- Fixed TLS failure in IAM token generation.
+- Fixed an issue where sessions using both queue splitting and scaledown would
+  instantly fail with `no target pod with new temporary environment was found`
+  error.
 
 ## 3.186.1 - 2026-07-22
 
