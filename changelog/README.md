@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-23T00:00:00.000Z
+lastmod: 2026-07-26T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,18 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.187.1 - 2026-07-26
+
+
+### Fixed
+
+- Fixed a bug where the operator would not delete stale copy_target pods or
+  delete them prematurely.
+- Fixed an issue where mirrord sessions were sometimes failing with a "session
+  configuration does not match" error.
+- Preview sessions will no longer leak traffic when their target's underlying
+  pods linger in the `Terminating` and still receive incoming requests.
 
 ## 3.187.0 - 2026-07-23
 
