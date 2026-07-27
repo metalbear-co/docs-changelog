@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-26T00:00:00.000Z
+lastmod: 2026-07-27T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,13 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.187.2 - 2026-07-27
+
+
+### Fixed
+
+- Faster leader failover and fixed a multicluster startup race.
 
 ## 3.187.1 - 2026-07-26
 
