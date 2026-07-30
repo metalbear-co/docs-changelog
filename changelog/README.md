@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-27T00:00:00.000Z
+lastmod: 2026-07-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,34 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.188.0 - 2026-07-30
+
+
+### Added
+
+- Added private CA and mTLS support for CockroachDB branch source copies.
+- Operator auth error telemetry now reports which license error occurred, so
+  license failures can be diagnosed instead of all reporting as a generic
+  failure.
+- PostgreSQL branches can recreate source roles with real attributes,
+  memberships, and grants via the `dbPod.roles: full` chart setting.
+
+
+### Changed
+
+- Improved functional logs, adding more information, logs for http, sqs, and
+  other queue types.
+
+
+### Fixed
+
+- Branch databases now fail fast with a clear error when the migration image
+  cannot be pulled.
+- Fixed database branching failing on older database images by building every
+  branch init binary against glibc 2.17.
+- Fixed value_pattern connection sources silently ignored for ConfigMap-backed
+  env vars.
 
 ## 3.187.2 - 2026-07-27
 
