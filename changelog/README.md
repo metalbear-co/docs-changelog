@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-07-30T00:00:00.000Z
+lastmod: 2026-08-01T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,35 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.189.0 - 2026-08-01
+
+
+### Security
+
+- Members holding the read-only organization role can no longer create, rotate,
+  or revoke API keys, or change license, billing, and payment details, by
+  calling the customer dashboard API directly. These operations now require the
+  organization admin role, and the dashboard hides the corresponding controls
+  from read-only members.
+- Updated the `event-listener` dependency to 5.4.2, which fixes
+  RUSTSEC-2026-0221: earlier versions unconditionally implement `Send` and
+  `Sync` for the stack-allocated listener created by the `listener!` macro, so
+  a `!Send` tag type could be moved across threads.
+
+
+### Fixed
+
+- Stolen requests are no longer delayed by roughly 40 milliseconds each. The
+  operator API server left Nagle's algorithm enabled on the connections it
+  accepts, so the second of the two writes it makes per stolen request waited
+  for the first to be acknowledged, and that acknowledgement was held by the
+  peer's delayed acknowledgement timer. Only the first request on a connection
+  escaped the wait. Connections accepted by the API server now set
+  `TCP_NODELAY`.
+- The license server now fails immediately with the underlying error when it
+  cannot bind its configured address, instead of exiting after a delay with a
+  misleading background task error. The address it binds is logged.
 
 ## 3.188.0 - 2026-07-30
 
