@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-01T00:00:00.000Z
+lastmod: 2026-08-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,21 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.190.0 - 2026-08-03
+
+
+### Added
+
+- Added named profiles to db branch configuration, letting one cluster hold
+  multiple pod baselines per database type.
+
+
+### Fixed
+
+- Fixed CockroachDB branching from multi-region source databases.
+- Fixed params-mode CockroachDB source connections being forced to
+  sslmode=disable.
 
 ## 3.189.0 - 2026-08-01
 
