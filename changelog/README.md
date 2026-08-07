@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-03T00:00:00.000Z
+lastmod: 2026-08-07T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,40 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.191.0 - 2026-08-07
+
+
+### Added
+
+- Added configurable replication factor for Kafka split topics, including
+  copying the source topic's.
+- Queue-splitting property lists and their secrets can now live in the
+  operator's namespace, shared by all target namespaces.
+- The active sessions API now honors Kubernetes `fieldSelector` queries, so
+  `mirrord session list --key <key>` filters sessions in the operator instead
+  of the CLI. In a multi-cluster setup the selector is forwarded to the other
+  clusters as well.
+- The onboarding wizard's Install Operator step now asks what's blocking
+  installation when setup stalls, so common blockers can be addressed faster.
+
+
+### Changed
+
+- Container-flavor DB branch migration jobs inherit the target's env and
+  envFrom, with connection vars redirected to the branch.
+- Raised the operator's default CPU limit from `200m` to `500m`. Override with
+  `operator.limits.cpu`.
+
+
+### Fixed
+
+- Fixed copy-target splitting not stamping the session key on matched messages.
+- Fixed sessions being closed while still starting up
+- Fixed short sessions lingering instead of expiring promptly
+- Wait for the Redis Pub/Sub subscription to be live before treating a split
+  session as ready, so a
+  message published right after the session starts is no longer dropped.
 
 ## 3.190.0 - 2026-08-03
 
