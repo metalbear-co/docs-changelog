@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-07T00:00:00.000Z
+lastmod: 2026-08-12T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,44 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.193.0 - 2026-08-12
+
+
+### Security
+
+- Backoffice now enforces its Content-Security-Policy instead of only reporting
+  violations.
+- The license server now enforces its Content-Security-Policy on dashboard
+  responses instead of only reporting violations, and sends
+  `Strict-Transport-Security` alongside it.
+
+
+### Added
+
+- Added the `cloud.anonymizeData` chart value (default `false`). Operators
+  authenticated with a cloud API key that carries identity consent attach the
+  same identity fields to cloud telemetry that a self-hosted license server
+  receives; setting the value to `true` keeps cloud telemetry anonymized.
+- Preview replicas on workload clusters.
+
+## 3.192.0 - 2026-08-10
+
+
+### Security
+
+- Added a report-only `Content-Security-Policy` to the management dashboard and
+  the hosted web services, along with `Strict-Transport-Security` headers where
+  they were missing. The policy is report-only, so violations are surfaced
+  without blocking any existing behaviour; enforcement follows separately.
+
+
+### Changed
+
+- The operator can now resolve `target.path.labels` into every matching pod in
+  a namespace and coordinate an agent for each eligible pod under one mirrord
+  session, enabling incoming traffic interception across multiple workloads
+  that share the configured labels.
 
 ## 3.191.0 - 2026-08-07
 
