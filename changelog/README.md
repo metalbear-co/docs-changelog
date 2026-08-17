@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-12T00:00:00.000Z
+lastmod: 2026-08-17T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,13 +13,43 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.194.0 - 2026-08-17
+
+
+### Added
+
+- Kafka queue splitting decodes plain-protobuf payloads for jq filters.
+- Keep Kafka splits warm and drain the fallback before teardown.
+- Operators reporting to the cloud with identity consent now show per-user and
+  per-target usage in the cloud usage report, matching what a self-hosted
+  license server already reports.
+
+
+### Changed
+
+- Branch database pods store data on per-branch PersistentVolumeClaims by
+  default
+- The operator now distributes outgoing connections between all mirrord-agents
+  used in a mirrord session.
+
+
+### Fixed
+
+- Fixed a race where two agents could be spawned for the same target pod in one
+  session, leaving that pod's traffic unstolen for the rest of the session.
+- Fixed agent pods that never become ready, for example because they cannot be
+  scheduled or cannot pull their image, staying in the cluster instead of being
+  cleaned up.
+- Fixed the Kafka splitting sidecar dropping messages produced while the split
+  was repointing the target workload.
+- Fixed the operator running every trace-level span when
+  `operator.otelTraceExportUrl` is set, regardless of the configured log level.
+
 ## 3.193.0 - 2026-08-12
 
 
 ### Security
 
-- Backoffice now enforces its Content-Security-Policy instead of only reporting
-  violations.
 - The license server now enforces its Content-Security-Policy on dashboard
   responses instead of only reporting violations, and sends
   `Strict-Transport-Security` alongside it.
