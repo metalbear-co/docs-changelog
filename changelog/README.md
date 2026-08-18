@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-17T00:00:00.000Z
+lastmod: 2026-08-18T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,27 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.195.0 - 2026-08-18
+
+
+### Security
+
+- Released images are now published with signed SLSA build provenance, so you
+  can verify that the image you pulled was built by our release pipeline from
+  this repository. Verify with `gh attestation verify
+  oci://ghcr.io/metalbear-co/operator:<version> --owner metalbear-co`.
+
+
+### Added
+
+- Added mirrord.temporary_group_id Kafka splitting property supporting KafkaJS
+  consumers
+- Preview environments that only use queue splitting can now target workloads
+  scaled to zero replicas, e.g. consumers scaled down by an autoscaler reacting
+  to queue lag. Queue splitting sessions against zero-replica workloads also
+  become ready immediately instead of waiting out the target pod readiness
+  timeout.
 
 ## 3.194.0 - 2026-08-17
 
