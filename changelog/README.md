@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-18T00:00:00.000Z
+lastmod: 2026-08-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,23 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.196.0 - 2026-08-19
+
+
+### Security
+
+- Updated the `h2` dependency to 0.4.16, which fixes RUSTSEC-2026-0258: earlier
+  versions accept and queue empty HTTP/2 DATA frames without limit, so a stream
+  that is not actively drained can grow memory unboundedly or panic on length
+  overflow.
+
+
+### Fixed
+
+- Fixed Kafka queue splitting with `mirrord.temporary_group_id` rejecting
+  workloads that consume several topics with one consumer group.
+- Granted mirrord users permission to create preview secret mounts
 
 ## 3.195.0 - 2026-08-18
 
