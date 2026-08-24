@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-19T00:00:00.000Z
+lastmod: 2026-08-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,40 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.197.0 - 2026-08-24
+
+
+### Added
+
+- Added operator free tier that has OSS-equivalent feature set, but includes
+  QoL improvements that come with operator (e.g. automatic reconnects, no RBAC
+  requirement for users, etc.)
+- Operator chart: allow unsetting the default CPU/memory requests and limits by
+  setting them to `null`, and configure agent pod resources first-class via
+  `agent.resources` instead of `agent.extraConfig`.
+- Postgres branch connections now default `sslmode` to the branch pod's TLS
+  state, overridable per key by admin `dbPod.queryParams` (incl. profiles) and
+  session `query_params`.
+- Support splitting zstd-compressed Kafka topics.
+
+
+### Fixed
+
+- Fixed private migration images by inheriting the target's imagePullSecrets.
+- `dbServerArgs` in `mysqlBranchConfig` / `mariadbBranchConfig` (including
+  profiles) is now
+  passed to the branch pod's database server; previously it was silently
+  ignored for those
+  engines and only worked for Redis. Use it e.g. to serve MySQL clients that
+  cannot do
+  `caching_sha2_password` over plain TCP: on 8.0 set
+  `["--default-authentication-plugin=mysql_native_password"]`, and on 8.4
+  `["--mysql-native-password=ON",
+  "--authentication-policy=mysql_native_password"]`, so the
+  branch's accounts are created with the legacy plugin. Enabling the plugin on
+  its own leaves
+  every account on the plugin it was created with.
 
 ## 3.196.0 - 2026-08-19
 
