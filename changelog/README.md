@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-24T00:00:00.000Z
+lastmod: 2026-08-25T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,86 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.198.0 - 2026-08-25
+
+
+### Added
+
+- Added AWS IAM (MONGODB-AWS) authentication for MongoDB DB branching.
+- Added AWS Secrets Manager connection sources for DB branching.
+- Added `operator.annotations` and `server.annotations` to the mirrord-operator
+  and mirrord-license-server charts, which stamp annotations onto the resources
+  the charts create (Deployment, Service, RBAC, and so on) rather than only
+  onto the pod template like `podAnnotations` does. CustomResourceDefinitions
+  are deliberately left out so an ordering annotation cannot delay them past
+  the workloads that need them. This lets GitOps tools order the two charts
+  against each other, for example with `argocd.argoproj.io/sync-wave`.
+- Copy targets report when they become eligible for deletion.
+- External resources report when their cleanup keeps failing, and workload
+  patches report whether they are in effect and what they conflict with.
+- Generic db branches can run a copy Job before turning Ready, with branch
+  defaults and copy configurable via profiles.
+- Kafka client configurations and queue registries report whether the operator
+  can resolve them.
+- Legacy Kafka topic consumer configurations now report when a
+  MirrordSplitConfig has taken over their workload.
+- Policies and property lists report what the operator cannot enforce or
+  resolve.
+- Resolve queue names from ConfigMaps mounted as files in queue splitting.
+- Sessions report when they will be closed for being unused.
+- Sessions, multi-cluster sessions, branch databases and preview sessions
+  report a `Ready` condition.
+- Split sessions report their lifecycle phase, which operator instance serves
+  them, and when no patched target pod ever became ready.
+- TLS steal configurations report ports declared more than once, and ports
+  another configuration with the same targets already claims.
+- `MirrordProfile` and `MirrordClusterProfile` report whether the CLI can apply
+  them, so a bad field reaches the profile's author directly.
+- `kubectl get` shows phase, target and age for every mirrord resource instead
+  of bare names.
+
+
+### Changed
+
+- Diagnostic print columns such as failure detail, hostname and API version
+  moved behind `kubectl get -o wide`.
+- Preview share links now work with any HTTP filter, not only the default one.
+- The operator Helm chart now defaults `operator.jsonLog` to `true`, so
+  operator pods emit structured JSON logs out of the box instead of requiring
+  an explicit values override.
+
+
+### Fixed
+
+- A branch database that recovers no longer keeps reporting the error it hit
+  before becoming ready.
+- A configuration's `Accepted` verdict now updates when an overlapping or
+  superseding resource changes, and a cluster-wide TLS steal configuration
+  reports conflicts with namespaced ones instead of only with other
+  cluster-wide ones.
+- A multi-cluster session waits for each cluster to report its own session
+  ready, and reports how long it has been running.
+- Fixed CockroachDB branch dumps failing on non-public schemas and enum
+  columns.
+- Fixed MySQL database branching against a source that uses IAM authentication,
+  which failed with "did not become ready" because the MySQL client tools were
+  not allowed to send the IAM token.
+- Fixed PostgreSQL branch copies failing on foreign keys between copied tables
+- Fixed Postgres branch init failing when the branch database already exists in
+  the base image.
+- Fixed Postgres branches reporting ready before the database accepts
+  connections
+- Fixed Temporal splitting rejecting workflows that schedule activities on the
+  default task queue.
+- Fixed machine-session duration averages in the license server's Postgres
+  usage report: `EXTRACT(SECONDS ...)` returned only the seconds component of
+  each session's duration, so any session crossing a minute averaged wrong in
+  the report and per-pipeline metrics.
+- Fixed preview secret mounts when database branching is disabled
+- Multi-cluster sessions no longer lose their copy target configuration.
+- Print columns show the target workload, authentication kind and expiry time
+  instead of a serialized object or `<invalid>`.
 
 ## 3.197.0 - 2026-08-24
 
