@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-25T00:00:00.000Z
+lastmod: 2026-08-27T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,27 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.199.0 - 2026-08-27
+
+
+### Added
+
+- Added a mirrord policy for enforcing queue splitting filters.
+- New `operator.pauseKedaScaleIn` holds a queue-split target up and pauses KEDA
+  scale-in for the split, so fallback queues still drain.
+
+
+### Fixed
+
+- Fixed operators configured with a license server trying to authenticate
+  against it with a cloud API key, which failed with a 404 on `/api/v2/token`.
+  Such an operator no longer authenticates to the cloud at all and sends no
+  identities to MetalBear; product telemetry, when enabled, is still sent
+  anonymized.
+- Fixed the usage dashboard clipping the largest bubble in the session scatter
+  charts and the first letters of long namespace names in the
+  sessions-by-namespace chart.
 
 ## 3.198.0 - 2026-08-25
 
