@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-27T00:00:00.000Z
+lastmod: 2026-08-31T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,26 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.200.0 - 2026-08-31
+
+
+### Changed
+
+- mirrord policies are now inherited from resources owning the session target.
+  For example, a policy targeting a deployment also applies to sessions that
+  atrget any of its owned pods.
+  Additionally, specifying a container in the policy target must now be done
+  explicity by including `/container/` in the path.
+
+
+### Fixed
+
+- Fixed AWS Secrets Manager branch sources for targets with static AWS keys.
+- IAM-authenticated apps connect to Postgres branches without a password.
+- Postgres and CockroachDB branch copies accept sslmode values in any spelling.
+- Preview sessions with an HTTP filter now fail when no incoming ports are
+  found instead of silently starting without traffic.
 
 ## 3.199.0 - 2026-08-27
 
