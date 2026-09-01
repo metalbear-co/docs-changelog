@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-08-31T00:00:00.000Z
+lastmod: 2026-09-01T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,28 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.201.0 - 2026-09-01
+
+
+### Added
+
+- RabbitMQ queue splitting now supports jq filters, which run against a JSON
+  representation of the message (`headers`, `properties`, `payload`). This also
+  lets `mirrord up` split RabbitMQ queues automatically, with no queue
+  splitting configuration from the user.
+- Redis branch data copy now supports TLS source databases
+
+
+### Fixed
+
+- Branch setup container failures now surface on the branch status instead of
+  hanging
+- Fixed CockroachDB branching failing on source databases containing
+  materialized views, and made copy modes refresh them after the data loads so
+  they are populated instead of empty.
+- Misplaced database branch config keys now fail loudly instead of being
+  silently ignored
 
 ## 3.200.0 - 2026-08-31
 
