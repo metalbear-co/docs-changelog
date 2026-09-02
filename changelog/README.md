@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-01T00:00:00.000Z
+lastmod: 2026-09-02T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,40 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.202.0 - 2026-09-02
+
+
+### Added
+
+- PostgreSQL branch pods now honour the `dbServerArgs` branch config.
+- Sessions from callers that authenticate with a Kubernetes ServiceAccount,
+  such as
+  cloud agents, are now treated as machine sessions: they don't consume a
+  license
+  seat and count against the license's concurrent machine session limit
+  instead.
+  Organizations whose developers authenticate through a shared ServiceAccount
+  can
+  have this turned off in their license, so those callers each take a seat.
+
+
+### Fixed
+
+- Fixed Azure Service Bus per-session subscriptions expiring during long-idle
+  sessions
+- Preview config mounts now carry session queue names for split files
+- Preview environments now work on service-mesh-injected targets: the preview
+  pod template is
+  annotated with `traffic.sidecar.istio.io/excludeInboundPorts` (Istio) and
+  `config.linkerd.io/skip-inbound-ports` (Linkerd) for the session's subscribed
+  ports, so the
+  operator's tunnel connections reach the preview app instead of being captured
+  (and, under
+  STRICT mTLS, reset) by the injected sidecar. The sidecar itself is kept, so
+  the preview app's
+  outgoing traffic still flows through the mesh.
+- Silenced spurious role errors in Postgres branch pod logs.
 
 ## 3.201.0 - 2026-09-01
 
