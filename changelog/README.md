@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-02T00:00:00.000Z
+lastmod: 2026-09-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,15 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.203.0 - 2026-09-03
+
+
+### Added
+
+- Added queue splitting support for NATS JetStream.
+- Preview environments with database branching now support targets scaled to
+  zero pods.
 
 ## 3.202.0 - 2026-09-02
 
