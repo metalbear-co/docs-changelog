@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-03T00:00:00.000Z
+lastmod: 2026-09-09T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,39 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.204.0 - 2026-09-09
+
+
+### Added
+
+- Added core NATS (non-JetStream) pub/sub queue splitting behind the
+  `operator.natsPubsubSplitting` chart flag. The operator republishes subject
+  traffic under per-session temporary subject prefixes with header and jq
+  filters, steal and mirror modes; delivery is best-effort since core NATS
+  persists nothing.
+- Added the `mirrord.group_join_timeout` Kafka property so
+  `mirrord.temporary_group_id` splits can wait longer than 3 minutes for slow
+  rollouts
+- The queue-splitting status API now reports the temporary queues created for a
+  split, both the ones shared by the workload and the per-session ones, so
+  `mirrord queues status` can show which broker resources belong to which
+  session.
+
+
+### Changed
+
+- Queue splitting tracks the temporary queues and topics it creates in batches.
+
+
+### Fixed
+
+- Added cluster level route for `Target` and `CopyTarget` so listing resources
+  with `--all-namespaces` option works properly.
+- Fixed CI session requests failing when a pooled database connection goes
+  stale.
+- Temporary broker queues and topics are recorded for cleanup before they are
+  created, so a crash cannot leave one untracked.
 
 ## 3.203.0 - 2026-09-03
 
