@@ -13,6 +13,25 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.206.0 - 2026-09-10
+
+
+### Added
+
+- NATS pub/sub splitting now honors `tmpNameTemplate` for temporary subject
+  prefixes.
+
+
+### Fixed
+
+- Client certificate signing now works when the cluster is reached through a
+  proxy that validates requests against the cluster's API discovery (such as
+  Teleport). The operator now advertises its client-credential resource in
+  aggregated API discovery, so such proxies recognize the resource kind instead
+  of rejecting the request.
+- Database branches restore sequence and identity positions, so inserts into a
+  copied table no longer fail on a duplicate id.
+
 ## 3.205.0 - 2026-09-09
 
 
