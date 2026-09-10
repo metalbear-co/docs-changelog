@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-09T00:00:00.000Z
+lastmod: 2026-09-10T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,57 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.205.0 - 2026-09-09
+
+
+### Security
+
+- Source TLS material is now mounted only into the copy container, never the
+  branch database container
+
+
+### Infrastructure
+
+- The operator chart grants the `previews/logs` route to users, and the
+  multi-cluster role the `pods/log` access a primary needs to tail each
+  workload cluster's preview pods.
+- When any queue splitting flavor is enabled, the operator role additionally
+  gets `get`/`create` on `pods/exec` (reading `podFile` sources from running
+  target pods; the websocket exec handshake authorizes as `get`) and
+  `create`/`update`/`delete` on `secrets` (operator-owned Secret copies
+  shadow-mounted over `podFile` sources; user Secrets are never modified).
+
+
+### Added
+
+- DB branching connection params can be read from a ConfigMap entry, including
+  a field inside a mounted JSON or YAML config file.
+- Queue splitting now resolves queue names from files injected into pods (e.g.
+  by vault-agent-injector) via the new `podFile` source in
+  `MirrordSplitConfig`.
+- The operator captures the last output from a preview environment's pods when
+  it fails, and serves it to the CLI from every workload cluster.
+
+
+### Fixed
+
+- Fixed Redis branch copy failing with permission denied reading source TLS
+  files
+- Mounted config file rewrites keep the file byte-identical outside the swapped
+  queue names
+- NATS split teardown no longer trusts a single momentarily-stale empty-backlog
+  read
+- Namespaced configuration resources have their status written in their own
+  namespace.
+- Temporal queue splitting accepts gzip and deflate compressed gRPC requests
+  from workers.
+- Temporal queue splitting forwards gRPC error details so SDKs raise typed
+  errors.
+- The port lock conflict error now points at `mirrord operator status` to list
+  active sessions, replacing a suggestion to run `mirrord sessions`, which is
+  not
+  a real subcommand.
 
 ## 3.204.0 - 2026-09-09
 
