@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-10T00:00:00.000Z
+lastmod: 2026-09-14T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,20 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.207.0 - 2026-09-14
+
+
+### Added
+
+- Added Liquibase migration support.
+- Redis branch data copy supports `dbPod.sourceSslmode: verify-ca` to verify a
+  TLS source's certificate chain without the hostname check
+
+
+### Fixed
+
+- Fixed queue modes when applied to queues using a wildcard ("*").
 
 ## 3.206.0 - 2026-09-10
 
