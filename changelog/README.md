@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-14T00:00:00.000Z
+lastmod: 2026-09-15T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,42 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.208.0 - 2026-09-15
+
+
+### Infrastructure
+
+- The `PreviewSession` CRD gains an optional `spec.cronjob.schedule` field, and
+  the operator role (with `operator.previewEnv`) gains `create`, `delete`, and
+  `patch` on `batch/cronjobs` plus `create` on `batch/jobs` to run CronJob
+  previews.
+
+
+### Added
+
+- Added S3 bucket branching (`operator.s3Branching`): a branch of `type: s3`
+  clones the target's bucket in the customer's AWS account - configuration,
+  tags and (optionally filtered) objects - and points the session at the clone.
+  The operator uses its own AWS credentials, so its IAM role needs the S3
+  permissions listed in the docs.
+- Preview environments can target a CronJob: the preview is an isolated CronJob
+  running the user's image, triggered once on start and then on its (optionally
+  overridden) schedule.
+
+
+### Changed
+
+- Operator logs now carry the full error chain, so a failure names its cause
+  rather than only the step that failed.
+
+
+### Fixed
+
+- Fixed long namespace names in the dashboard's session activity and service
+  tables wrapping onto several lines or spilling into the next column.
+- The operator is granted permission to write `MirrordKafkaClientConfig`
+  statuses.
 
 ## 3.207.0 - 2026-09-14
 
