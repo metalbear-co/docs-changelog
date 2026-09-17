@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-15T00:00:00.000Z
+lastmod: 2026-09-17T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,53 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.209.0 - 2026-09-17
+
+
+### Added
+
+- Preview share hosts can be minted from the session key alone with
+  `operator.shareIngress.stableSlugs`.
+- The `mirrord_stolen_connections_count` and `mirrord_stolen_requests_count`
+  metrics now carry the `client_user` and `client_name` labels alongside the
+  existing `user_id`, matching the session metrics, so stolen traffic can be
+  attributed without resolving the opaque id.
+- The usage dashboard has a Preview Environments card and tab: sessions,
+  session time, average duration and peak concurrency for the selected period,
+  daily concurrency against the licensed machine-session limit, usage per
+  service, and every environment with the services it ran. CI sessions get
+  their own view beside Users and Services. The Usage tab is now called
+  General.
+- The usage report separates preview environment sessions from CI sessions,
+  with session counts, session time, average duration and peak concurrency for
+  each, the combined peak against the licensed machine-session limit and the
+  instant each peak was reached, preview usage per service, the sessions in the
+  reporting period, and daily peaks in the trends. The operator records the
+  preview environment key with each preview session so an environment's
+  services can be reported together. Requires the PostgreSQL backend.
+- When the organization has agreed to share identities with MetalBear, preview
+  environment sessions reach the cloud usage dashboard with their service,
+  namespace and environment key, including sessions that are still running.
+  Without that agreement they stay anonymized, as before.
+
+
+### Changed
+
+- The preview environments table leaves out sessions recorded without a service
+  or environment and says how many it left out, and the concurrency card
+  shrinks to the billed peak when there is no daily history to plot.
+
+
+### Fixed
+
+- Deleting a Kubernetes namespace no longer hangs when the operator's license
+  has expired. Listing and killing sessions now works whatever the state of the
+  license; starting one still requires a valid license.
+- Fixed primary buttons in the cloud dashboard, such as Apply on the custom
+  date range, rendering without a background and unreadable in light mode.
+- The operator reports itself to mirrord cloud as soon as it starts instead of
+  waiting for the first telemetry flush.
 
 ## 3.208.0 - 2026-09-15
 
