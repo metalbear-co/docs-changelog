@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-17T00:00:00.000Z
+lastmod: 2026-09-21T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,29 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.210.0 - 2026-09-21
+
+
+### Added
+
+- The operator chart accepts `operator.communicationTimeoutMillis`, setting how
+  long either side of a connected session may go silent.
+- `mirrord subscribe` can now stream every session at once, say how each
+  message was routed, pair an HTTP request with the response that answered it,
+  and report queue messages no session filter took.
+
+
+### Fixed
+
+- HTTPS stealing works when the original client sends no SNI:
+  `agentAsClient.verification.serverName` names the host the agent verifies.
+- MySQL and MariaDB branches now include the source's stored routines, and
+  copied views, routines and triggers work on the branch.
+- MySQL and MariaDB branches run with the source server's SQL mode, character
+  set, collation, time zone and transaction isolation.
+- Queue splitting session startup now reports 500 when the operator cannot
+  watch the split session resources, instead of a misleading 403.
 
 ## 3.209.0 - 2026-09-17
 
