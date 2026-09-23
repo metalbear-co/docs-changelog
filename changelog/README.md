@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-21T00:00:00.000Z
+lastmod: 2026-09-23T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,88 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.211.0 - 2026-09-23
+
+
+### Infrastructure
+
+- The operator ClusterRole no longer grants `get`/`create` on `pods/exec`.
+- The operator's ClusterRole is granted `patch` on
+  `mirrordkafkaephemeraltopics`, which it needs to clear the finalizer on
+  leftover objects from an older operator version. Only rendered when Kafka
+  splitting is enabled.
+- When `operator.topology` is enabled, the operator's own `mirrord-operator`
+  ClusterRole (not the user role) gains `get`/`list`/`watch` on
+  `discovery.k8s.io` `EndpointSlices`, used to resolve which Service a
+  session's outgoing connection reached. The value is off by default, and the
+  role is unchanged while it is off.
+- With the new `operator.topology` chart value enabled (off by default), the
+  operator records service-to-service edges from the outgoing connections a
+  session's target opens and the incoming connections it accepts, observed
+  during mirrord sessions and preview environments, and serves the resulting
+  topology through the new read-only `mirrordclusterservicegraphs` aggregated
+  API resource (in-memory only, nothing persisted to etcd, no
+  CustomResourceDefinition installed). While enabled, the
+  `mirrord-operator-user` ClusterRole gains `get`/`list` on
+  `mirrordclusterservicegraphs`.
+
+
+### Added
+
+- Added a Topology tab to the dashboard: a service map of the connections
+  observed during mirrord sessions, with the sessions and users behind each
+  edge and node categories derived from well-known ports. Edges are routed
+  around services and bundled, large clusters open folded into one box per
+  namespace, and the map offers search, namespace and category filters, a focus
+  mode for a service's upstream and downstream, a sortable list of every
+  connection, and PNG export.
+- The license server stores the in-cluster services each session's target, and
+  each preview environment's target, exchanged connections with, and serves
+  them aggregated with a direction as `GET /api/v1/reports/topology`, the data
+  behind the dashboard's topology view.
+- The operator now reports on its startup telemetry whether it authenticated
+  with a cloud API key, a license file, or a license key.
+- When `operator.topology` is enabled, session and preview environment
+  telemetry reports carry the in-cluster services the target connected to and
+  was connected from (`connected_services`, each with a direction), so usage
+  dashboards can show a service topology. A connected service that fronts a
+  preview environment also names the preview's key and target (`preview`), so
+  the topology can draw preview environments as such. The field is identity
+  data: the license server receives it as-is, and the cloud receives it only
+  when identity sharing is enabled for the operator's API key.
+- mirrord now warns when a database branch's image runs a different server
+  version than the source database, naming both versions.
+
+
+### Changed
+
+- Queue splitting reads `podFile` sources through a mirrord agent instead of
+  `pods/exec`, so the container needs no shell or `cat` binary.
+- The dashboard fills the full viewport width. The embed CSS template's
+  white-label hook is now `.dashboard-embed::before` instead of
+  `.max-w-7xl::before`; embedded dashboards using a copied template need the
+  new selector.
+- The operator dashboard header shows only the mirrord brand; the "Utilization"
+  subtitle is gone.
+
+
+### Fixed
+
+- A workload patch waiting for a pod that has not rolled away is now polled and
+  logged less often the longer it waits.
+- Fixed CronJob previews failing for source CronJobs with long names.
+- Fixed UDP traffic addressed to a target node's stale HostIP being rejected
+  after the target scaled down by rewriting it to a live target node.
+- Fixed multi-cluster CI sessions not counting towards the concurrent CI
+  session limit. A session started with `mirrord ci start` against a
+  multi-cluster setup is now reported once, from the cluster coordinating it,
+  however many clusters it reaches.
+- Fixed the cleanup of leftover `MirrordKafkaEphemeralTopic` objects from older
+  operators retrying the same object every 30 seconds for the lifetime of the
+  operator when a step failed.
+- The operator and license server Deployments no longer render an empty
+  `annotations` field when no pod annotations are set.
 
 ## 3.210.0 - 2026-09-21
 
