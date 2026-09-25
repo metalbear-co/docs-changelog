@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-23T00:00:00.000Z
+lastmod: 2026-09-25T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,54 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.212.0 - 2026-09-25
+
+
+### Infrastructure
+
+- The operator ClusterRole gains `get` on Secrets to read a preview session's
+  TLS client certificate from the Secret it created. The multi-cluster Envoy
+  role also gains `get` and `create` on Secrets when preview environments are
+  enabled, to replicate session-owned credentials to workload clusters.
+
+
+### Added
+
+- Database branch connection params layer over a `url` param, so one connection
+  string can supply the host, port and database.
+- Failed database branches now report the branch pod's last log lines in their
+  error and Ready condition, so users see why branching failed without reading
+  pod logs.
+- Preview sessions present the `tls_delivery.client_cert` client certificate
+  when delivering stolen TLS requests to preview pods that require one. Startup
+  waits for the CLI credential upload, and session Secrets follow previews to
+  the default cluster and additional replicas. The operator advertises preview
+  TLS delivery support so newer CLIs can reject incompatible installations
+  before replacing a session.
+- Queue splitting sessions accept composable message filters (`metadata`
+  regexes combined with `any_of` / `all_of`) next to the existing
+  `message_filter` map.
+- The mirrord UI now shows how many incoming traffic deliveries each active
+  port subscription receives.
+
+
+### Changed
+
+- The operator chart's missing-credential error points AI coding agents at the
+  agent-started trial.
+
+
+### Fixed
+
+- License errors now point at the MetalBear community Slack and the
+  `hi@metalbear.com` address, replacing a link to the retired Discord server
+  and
+  an outdated email domain, and break across lines instead of printing a
+  literal
+  `\n` between the message, the reason, and the contact details.
+- Source database URLs with a `jdbc:` prefix now parse instead of failing with
+  a missing host.
 
 ## 3.211.0 - 2026-09-23
 
