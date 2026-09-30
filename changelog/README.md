@@ -13,6 +13,42 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.214.0 - 2026-09-30
+
+
+### Infrastructure
+
+- The BranchDatabase CRD schema accepts `additionalDatabases` in
+  `postgresOptions`.
+- `operator.previewEnv` defaults to `true`, so a default installation includes
+  the `previewsessions.preview.mirrord.metalbear.co` CRD, and the operator's
+  own `mirrord-operator` ClusterRole (not the user role) gains the preview
+  environment permissions: creating and deleting Services, Deployments,
+  CronJobs and Jobs, managing PreviewSessions, and creating ConfigMaps and
+  Secrets for preview sessions. In multi-cluster setups, the workload-cluster
+  role also gains `get`/`create` on Secrets. Set `operator.previewEnv: false`
+  to keep the previous CRDs and roles.
+
+
+### Added
+
+- GCP Pub/Sub queue splitting: set `gcs_event: "true"` in the queue config so
+  jq filters can match the custom metadata of the Cloud Storage object a
+  notification is about, as `.gcsMetadata`. Notifications with the `NONE`
+  payload format also need `storage.objects.get` on the bucket for the identity
+  of the queue's client config (its `credentials_json` service account, or the
+  operator's own identity).
+- PostgreSQL branches copy several databases from one source server into one
+  branch pod.
+
+
+### Fixed
+
+- Karpenter can now replace or remove a node that runs a targeted mirrord
+  agent, for example in a Kubernetes upgrade. The agent pod has its node as the
+  owner, and it stops together with the node. `kubectl drain` also evicts
+  targeted agent pods without `--force`.
+
 ## 3.213.0 - 2026-09-30
 
 
