@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-25T00:00:00.000Z
+lastmod: 2026-09-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,42 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.213.0 - 2026-09-30
+
+
+### Infrastructure
+
+- Enabling `operator.turbopufferBranching` grants the operator the database
+  branching Secret permissions and installs the `BranchDatabase` CRD, as the
+  other branching dialects already do.
+- The PreviewSession CRD schema accepts a label selector target.
+
+
+### Added
+
+- Added turbopuffer namespace branching.
+- Preview sessions accept a label target covering several workloads.
+
+
+### Fixed
+
+- BullMQ queue splitting no longer loses a job when the operator restarts or
+  Redis fails while the job is being forwarded.
+- Preview `config_mounts` and `secret_mounts` now work at paths inside a
+  directory the target mounts from a ConfigMap, Secret, or projected volume.
+- RabbitMQ queue splitting no longer deletes a temporary queue that still holds
+  unconsumed messages or has a consumer attached, so deliveries a pod holds
+  unacked are not lost with it; the split waits for `drainTimeout` and reports
+  the kept queue in a `Drained` condition.
+- RabbitMQ queue splitting no longer loses messages when a session or main
+  output queue is deleted mid-session; they stay on the original queue until
+  the queue is back.
+- The Kafka splitting Java sidecar can now consume from topics compressed with
+  zstd, snappy, or lz4.
+  The sidecar gets a writable `/tmp` to unpack the codecs' native libraries
+  into.
+- The Kafka splitting sidecar no longer leaks admin clients.
 
 ## 3.212.0 - 2026-09-25
 
