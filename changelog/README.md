@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-09-30T00:00:00.000Z
+lastmod: 2026-10-05T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,68 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.215.0 - 2026-10-05
+
+
+### Security
+
+- Hide the values of headers and message properties with names that often hold
+  secrets, such as `Authorization`, `Cookie`, `X-Api-Key` and `Client-Secret`,
+  in the operator's request and message logs. The logs show `[REDACTED]` in
+  place of these values.
+
+
+### Infrastructure
+
+- Allow restricted roles to read and connect to generated copy names. The
+  operator checks the caller's permissions for the original target.
+- Allow the operator chart to create namespaced roles and bindings for access
+  to specific targets.
+  For operations on copy pods, access to the original target is used.
+- ScaledObject get, list, watch, and patch are granted by
+  `operator.manageKedaScaledObjects`.
+- The `mirrord-hooks` ClusterRole of the `pre-delete` hook is granted list,
+  get, watch, delete and patch on
+  `mirrordclusterworkloadpatchrequests.mirrord.metalbear.co`, so that the hook
+  can clear workload patch requests during `helm uninstall`.
+
+
+### Added
+
+- Organization admins can edit and reset user display names in the cloud
+  dashboard, including labels for anonymized users. Manually assigned names are
+  preserved when new session telemetry arrives.
+- Set the `operator.hideHeadersAndProperties` Helm value to `true` to remove
+  HTTP request headers and queue message properties from the operator's
+  `Message Processing` logs.
+
+
+### Changed
+
+- Split targets scaled by KEDA scale on the temporary queue they consume, down
+  to zero, instead of staying at one replica.
+
+
+### Fixed
+
+- A Flux Kustomization or HelmRelease is suspended for a rescaled workload only
+  if it applies that workload, not merely because the labels name it.
+- A copy target scaling down a KEDA-scaled workload keeps it at zero instead of
+  KEDA scaling it back up, when `manageKedaScaledObjects` is set.
+- Argo CD applications paused for a scaled-down copy target resume even when
+  the operator restarts during the session.
+- Database branch pods pull private images with the target's
+  `imagePullSecrets`, so a custom branch `image` needs no extra configuration.
+- Fixed cleanup of queue resources for sessions started after an operator
+  restart.
+- On `s3_event` SQS queues, only jq filters naming `S3Metadata` fetch and see
+  it, so other sessions keep receiving messages when S3 cannot answer.
+- `helm uninstall` no longer leaves the
+  `mirrordclusterworkloadpatchrequests.mirrord.metalbear.co` CRD stuck in
+  deletion when a mirrord session was still ending, and no longer leaves a
+  workload patched when its patch was removed before the session that patched
+  it.
 
 ## 3.214.0 - 2026-09-30
 
