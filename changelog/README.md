@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-05T00:00:00.000Z
+lastmod: 2026-10-06T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,34 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.216.0 - 2026-10-05
+
+
+### Infrastructure
+
+- Add `spec.incoming.tlsDelivery.clientAuthFromTarget` to the `PreviewSession`
+  CRD. When it is set, or when the target's `MirrordTlsStealConfig` sets
+  `agentAsClient.authentication`, the operator reads the TLS client certificate
+  and key from a running target pod through an agent and keeps them in memory
+  for the session only.
+
+
+### Added
+
+- Preview sessions can present a TLS client certificate that already lives in
+  the target's container (`tls_delivery.client_cert_source: target`): the
+  operator reads it from a running pod of the target instead of requiring a
+  copy on the developer's machine. Without any client certificate in
+  `tls_delivery`, previews now present the agent's client certificate from the
+  target's `MirrordTlsStealConfig` (`agentAsClient.authentication`). A
+  certificate read from the target is read again every hour, so previews keep
+  working after a sidecar renews it in place.
+
+
+### Fixed
+
+- Database branches now start on PostgreSQL 18 images.
 
 ## 3.215.0 - 2026-10-05
 
