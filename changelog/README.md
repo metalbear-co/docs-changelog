@@ -13,6 +13,41 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.217.0 - 2026-10-06
+
+
+### Infrastructure
+
+- The `PreviewSession` CRD gains an optional
+  `spec.dbBranching.connectionSources` field, the session's own env var mapping
+  for a reused db branch whose spec was written by a different config.
+- The rules in the `mirrord-operator` ClusterRole are in a different order, and
+  some rules are split in two. They give the same permissions as before.
+- With `namespaced: true`, the `mirrord-operator` ClusterRole keeps only the
+  rules for cluster-scoped resources. The chart adds a
+  `mirrord-operator-namespaced` Role and RoleBinding with the rules for
+  namespaced resources in each namespace of `allowedNamespaces` and in the
+  operator namespace. With the default `namespaced: false`, the permissions do
+  not change.
+
+
+### Added
+
+- New `namespaced` and `allowedNamespaces` chart values limit the operator to
+  some namespaces. The operator refuses sessions in other namespaces.
+- Share-ingress chart option `shareIngress.notFound.redirect` (default `true`).
+  Set it to `false` to serve a plain "Preview not found" 404 page with no
+  redirect, refresh, or JavaScript for share hosts without a live preview;
+  `shareIngress.appDomain` is then optional.
+
+
+### Fixed
+
+- Fixed queue splits stopping for live previews when the API server is
+  overloaded.
+- Preview pods reusing a db branch get their own env var mapping, with branch
+  values delivered via Secret.
+
 ## 3.216.0 - 2026-10-05
 
 
