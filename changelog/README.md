@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-06T00:00:00.000Z
+lastmod: 2026-10-07T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,39 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.218.0 - 2026-10-07
+
+
+### Infrastructure
+
+- The MirrordSplitConfig CRD schema accepts `dbBranches`, and the CRD plus the
+  operator's `mirrordsplitconfigs` permissions are installed when only database
+  branching is enabled.
+- The `PreviewSession` CRD accepts `spec.specResources`: a pod template,
+  ConfigMaps, and Secret key references.
+
+
+### Added
+
+- Added `dbBranches` to `MirrordSplitConfig` for declaring database branches
+  per workload
+- Previews can be built from manifest files with `mirrord preview start
+  --resource`.
+
+
+### Fixed
+
+- Clients reconnect as soon as a split's queues change.
+- PostgreSQL branches keep the PGDATA a custom image sets.
+- Queue splitting now restores the target's pods before deleting the shared
+  temporary queue they read from, so ending a session no longer crashes pods
+  that treat a missing queue as fatal. A GCP Pub/Sub main output subscription
+  that still holds messages at that point is kept, and named in the `Drained`
+  condition, instead of being deleted with them. Failed or crash-looping
+  patched pods are replaced right away instead of after a timeout.
+- The "Read the docs" link on the empty Topology tab opens the Topology docs
+  page.
 
 ## 3.217.0 - 2026-10-06
 
