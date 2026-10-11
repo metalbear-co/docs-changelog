@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-07T00:00:00.000Z
+lastmod: 2026-10-11T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,63 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.219.0 - 2026-10-11
+
+
+### Infrastructure
+
+- Added `identities` to `agentAsClient` section in the `MirrordTlsStealConfig`
+  and `MirrordClusterTlsStealConfig`, letting the agent present a different
+  client certificate to the target depending on the identity of the original
+  client.
+- Branch database CRDs gain `status.sessionInfo.*.instanceId`; apply the
+  updated CRDs with this release.
+- Keep webhook list and delete for older operator images.
+- The chart installs the `mirrord-operator-pod-mutator`
+  MutatingWebhookConfiguration and grants `get` and `patch` on that one name.
+  `list` and `delete` stay so an older operator image can finish startup
+  cleanup.
+- The license server chart now applies `database.port`, and sets a Postgres SSL
+  mode the server accepts: `require` when `database.tls` or
+  `database.auth.awsIam` is set, instead of a misspelled `verify-full` that was
+  ignored and fell back to `prefer`. New `database.sslMode` and
+  `database.sslRootCert` values enable certificate verification, e.g.
+  `verify-full` with the RDS CA bundle.
+
+
+### Added
+
+- Database branch entries on a MirrordSplitConfig resolve `db_branches: "*"` /
+  ids and are shared per session key.
+
+
+### Changed
+
+- Migration and copy Job pods inherit `dbPod.labels` and `dbPod.annotations`.
+- Operator registers mutating webhooks only for queue splitting.
+
+
+### Fixed
+
+- A database branch whose expiry passes while a session still uses it gets its
+  TTL extended, instead of the operator re-checking it continuously.
+- Database branches expire by their TTL after an operator restart instead of
+  being kept alive by the sessions that ended with it.
+- Database branches whose pod or migration Job pod the cluster rejects expire
+  by their TTL, releasing their PersistentVolumeClaims instead of keeping them
+  indefinitely.
+- In multi-cluster setups, branch statuses on the primary cluster drop ended
+  sessions and cleared errors, so `mirrord db-branches status` stays current.
+- MySQL and MariaDB `dump_args` can leave out objects a copy mode includes,
+  such as stored routines with `--skip-routines`.
+- MySQL and MariaDB branches leave out stored routines the source user cannot
+  read and warn about them, instead of failing.
+- MySQL branches load in every copy mode from sources with GTIDs enabled.
+- Queue splitting reports why target pods aren't ready while a session waits on
+  them, and fails the session at once if they can't start.
+- When no pod of a session's target is ready, the session error names the pods
+  and why, instead of only saying the target could not be processed.
 
 ## 3.218.0 - 2026-10-07
 
