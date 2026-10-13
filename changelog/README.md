@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-11T00:00:00.000Z
+lastmod: 2026-10-13T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,48 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.220.0 - 2026-10-13
+
+
+### Infrastructure
+
+- The operator role gains `create` and `delete` on Services for the per-branch
+  Service, and `patch` on PersistentVolumeClaims to mark a completed first
+  load.
+- `mirrord-operator-envoy-remote` can watch `events` so the primary relays
+  member clusters' events.
+- `mirrord-operator-user-basic` no longer grants `create` on
+  `previewsecretmounts` and `splitconfigdbbranches`; the `roleNamespaces` Roles
+  do.
+
+
+### Added
+
+- A `MirrordSplitConfig` can select workloads by label with `targetSelector`,
+  and every config that applies to a workload is merged.
+- MySQL and MariaDB branches can recreate source accounts with their grants and
+  definers via the `dbPod.roles: full` chart setting.
+- Supporting Free-tier operators allow `mirrord ci` without a CI API key, using
+  automatic ordinary client credentials and the same single-pod-per-connection
+  limits, feature restrictions, and compatible concurrent-session behavior as
+  Free `mirrord exec`.
+- `mirrord subscribe` on a multi-cluster primary streams every linked cluster's
+  events.
+
+
+### Fixed
+
+- Database branch pods deleted or evicted are replaced on their existing
+  volumes, behind a Service that keeps sessions connected.
+- MySQL 5.7 branches leave out stored routines the source user cannot read and
+  warn about them, instead of failing.
+- Preview `secret_mounts` Secrets are created only for an existing
+  `PreviewSession`, and never replace a Secret holding other contents.
+- Return Kubernetes type and object metadata from the database branch
+  credentials API while retaining the response fields used by older clients.
+- Users bound to `mirrord-operator-user` by a `RoleBinding` can use literal DB
+  branch connection values.
 
 ## 3.219.0 - 2026-10-11
 
