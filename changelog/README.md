@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-13T00:00:00.000Z
+lastmod: 2026-10-14T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,29 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.221.0 - 2026-10-14
+
+
+### Added
+
+- A `MirrordSplitConfig` can point KEDA triggers that measure a queue through a
+  query at the split's temporary queue with `scaleTriggerOverrides`.
+
+
+### Changed
+
+- Temporal task queues always split in `steal` mode, ignoring `mirror`
+  requests.
+
+
+### Fixed
+
+- Preview sessions that lose their target pods now report the no-live-agent
+  timeout and how to raise it, instead of "agent disconnected unexpectedly".
+- Replacing a preview with a new image keeps its share host and link.
+- Sessions no longer time out while a replacement target pod's agent is still
+  starting.
 
 ## 3.220.0 - 2026-10-13
 
