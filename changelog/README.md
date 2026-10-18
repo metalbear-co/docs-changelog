@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-14T00:00:00.000Z
+lastmod: 2026-10-18T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,61 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.222.0 - 2026-10-18
+
+
+### Infrastructure
+
+- A `BranchDatabase` spec can no longer change after the branch is created,
+  except for `migrations`.
+- With `operator.kafkaBranching`, the chart adds the
+  `MirrordClusterKafkaBranch` CRD and lets the operator manage Services in its
+  own namespace.
+- With `operator.sessionsManager` enabled, the `mirrord-operator-user`,
+  `mirrord-operator-ci` and `mirrord-operator-user-basic` ClusterRoles are
+  granted `proxy` on `serverlessclientassignments` and `get` on
+  `serverlessdataplanes` (`operator.metalbear.co`), the resources a developer's
+  mirrord uses on the operator-hosted sessions-manager, and a new
+  `mirrord-operator-sessions-manager-agent` ClusterRole is created for the
+  workload companion's agent with `proxy` on `serverlessagentassignments` and
+  `get` on `serverlessdataplanes`. Setting `operator.sessionsManagerUserRbac`
+  to `false` leaves the client rules out of the mirrord user ClusterRoles, for
+  granting scoped client access through your own roles.
+
+
+### Added
+
+- Added Kafka branching, which runs a session's Kafka queues against an
+  isolated broker shared by its key and wakes idle preview environments.
+- DB branching selects one field from JSON AWS/GCP secrets.
+- mirrord policies can block database branching, for all branches or by engine
+  and source name, and restrict branch copy modes.
+
+
+### Changed
+
+- Dashboard: the topology "Data store" category is now called "Database".
+- Dashboard: the topology map opens with Entry point and Preview env categories
+  hidden; the legend chips turn them back on.
+- Dashboard: the topology map routes edges between namespaces for up to six
+  open namespaces instead of three, so cross-namespace connections stay
+  orthogonal on mid-sized clusters.
+- Dashboard: the topology toolbar wraps instead of cutting off legend chips,
+  namespace, highlight and preview env key filters live under an Advanced
+  filters toggle, and an empty time range says so instead of claiming topology
+  is off.
+
+
+### Fixed
+
+- An idle preview environment whose target has no queue to split, and no
+  incoming ports, fails with a missing wake source instead of sleeping until
+  its TTL.
+- Dashboard: topology namespace labels no longer spill past their lane when the
+  map is zoomed out.
+- Preview environments and copy targets set split queue env vars in every
+  container the `MirrordSplitConfig` names, not just the target.
 
 ## 3.221.0 - 2026-10-14
 
