@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-18T00:00:00.000Z
+lastmod: 2026-10-19T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,22 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.223.0 - 2026-10-19
+
+
+### Infrastructure
+
+- Opt-in `dbBranchNamespaces` grants `get`/`list`/`create`/`patch`/`delete` on
+  namespaces for cluster-wide installations, `list`/`patch`/`delete` on
+  ConfigMaps, and `get`/`create`/`patch` on ServiceAccounts
+
+
+### Added
+
+- Run DB branches in a dedicated namespace per session key, with a configurable
+  `operator.dbBranchNamespacePattern` (default `mirrord-{{key}}`); existing
+  branches retain their namespace when the pattern changes
 
 ## 3.222.0 - 2026-10-18
 
