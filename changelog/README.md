@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-19T00:00:00.000Z
+lastmod: 2026-10-22T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,49 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.224.0 - 2026-10-22
+
+
+### Security
+
+- Update `webpki-roots`, `webpki-root-certs` and `rustls-webpki` to stop
+  trusting the compromised eMudhra intermediate certificate authorities.
+
+
+### Added
+
+- DB branches read connection values from AWS SSM Parameter Store.
+- Teams operators allow `mirrord ci` without a CI API key while retaining
+  licensed Teams features. Free and Teams single-cluster CI attach to at most
+  one ready target pod per connection.
+- The operator dashboard shows a prompt to paste into an AI coding agent, which
+  then installs mirrord and sets it up.
+
+
+### Changed
+
+- Advertise features that the Helm values switch off, so the CLI can tell users
+  to enable the value instead of upgrading the operator.
+- PostgreSQL branch errors explain unreachable sources and unverifiable
+  `sslmode`.
+- The dashboard login and sign-up pages have their own browser tab titles. The
+  default page title is "mirrord for Teams Dashboard | MetalBear".
+
+
+### Fixed
+
+- Added `containerNames` to `MirrordSplitConfig` app-config references to avoid
+  Kustomize `images:` build failures. The legacy `containers` field remains
+  supported; use only one spelling per reference. Upgrade both the operator and
+  CRD before adopting `containerNames`, and restore `containers` before rolling
+  back to an older operator.
+- Fixed SQS queue splitting filters not matching SNS `Number` message
+  attributes that carry a custom data type label, such as
+  `Number.java.lang.Integer`.
+- The operator status reports the header filter each preview environment was
+  started with, so the browser extension joins a preview that filters on a
+  custom header with that header instead of `baggage`.
 
 ## 3.223.0 - 2026-10-19
 
