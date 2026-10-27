@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-22T00:00:00.000Z
+lastmod: 2026-10-27T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,94 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.226.0 - 2026-10-27
+
+
+### Security
+
+- Updated dependencies to fix the security advisories reported against them.
+
+
+### Added
+
+- Redis branches with `cluster: true` run as a one node Redis Cluster owning
+  every hash slot, so Redis Cluster clients can use them; `copy.mode: all`
+  copies from a standalone or a Redis Cluster source.
+- The operator chart accepts `operator.kafkaSplittingSidecar.extraEnv` to set
+  additional environment variables on the Java Kafka splitting sidecar.
+
+
+### Changed
+
+- The cloud API key now takes precedence for licensing, with fallback to other
+  configured license credentials.
+
+
+### Fixed
+
+- Fixed `roles: full` branches replacing an app user that comes from a Secret
+  with `root`.
+- The operator now reloads its license file when it changes, without a restart.
+
+## 3.225.0 - 2026-10-24
+
+
+### Added
+
+- Added `dbPod.copyDeadlineSecs` to the branch config: the longest a branch
+  copy Job may run before it is stopped and the branch fails (default one
+  hour).
+- Preview sessions that mark their queue splits as defaults
+  (`autoQueueSplitting`, sent by `mirrord preview up`) skip the brokers whose
+  splitting is off instead of failing, as `mirrord up` sessions do.
+
+
+### Fixed
+
+- A database branch whose copy step runs longer than its `ttl_secs` is no
+  longer deleted while the copy is still running: the running copy keeps the
+  branch alive, the same way an active session keeps a ready branch alive. A
+  copy that runs past its deadline, one hour by default, is stopped and fails
+  the branch, so a hung copy no longer leaves its branch behind.
+- A queue splitting session no longer stays in `ResourcesReady` after it is
+  ready when the write of its `Ready` status gets no answer from the Kubernetes
+  API. Each status write now gives up after 15 seconds and is retried, and
+  failed writes are logged at warn level.
+- A queue splitting session that joins a split started before one of the
+  `MirrordSplitConfig`'s queues was visible to the operator no longer fails
+  with "queue not found in resolved params": the split is rebuilt with every
+  queue of the config, and the sessions already on it reconnect.
+- DynamoDB branches on clusters with a default storage class no longer fail to
+  start. The branch pod hands its data volume to the database user with
+  `fsGroup`, so the database can open its files on a provisioned volume.
+- MSSQL branches on clusters with a default storage class no longer fail to
+  start. The branch pod hands its data volume to the database user with
+  `fsGroup`, so SQL Server can copy its system files onto a provisioned volume
+  instead of exiting on "Access is denied".
+- Starting a mirrord session no longer fails with a 500 "already exists" error
+  when the operator is slow to see the session it just created: a resent start
+  request now waits for the session the first attempt created instead of
+  failing on its name.
+- The `Drained` condition a split teardown records on a `MirrordSplitConfig` no
+  longer disappears: the operator rewrote the condition list from an outdated
+  copy when it rechecked the config, and could drop a `Drained` written moments
+  earlier.
+- Waking idle previews tolerates image pull failures until `wake_timeout_secs`.
+- `tmpNameTemplate` in a `MirrordSplitConfig` names the temporary queues and
+  topics for RabbitMQ, SQS, and Kafka too, and for Kafka takes precedence over
+  `kafkaSplittingTopicFormat`. It supports `{{RANDOM}}`, `{{FALLBACK}}`
+  (`-main-` for the queue the patched workload reads, `-` for a session's) and
+  `{{ORIGINAL}}`; SQS FIFO queues keep `.fifo` at the end. With
+  `mirrord.temporary_group_id`, Kafka sessions' consumer groups follow the
+  template too, with `{{RANDOM}}` derived from the session id; sessions running
+  during the upgrade switch to their templated group and start from its reset
+  offset. A config with RabbitMQ, SQS, or Kafka queues is no longer accepted
+  when its template is missing `{{RANDOM}}`, uses another placeholder
+  (including Kafka's `{{ORIGINAL_TOPIC}}`), contains characters the broker does
+  not allow in names, or is too long for the broker's name limit. Permissions
+  or ACLs scoped to the `mirrord-` prefix must also cover the names the
+  template produces.
 
 ## 3.224.0 - 2026-10-22
 
