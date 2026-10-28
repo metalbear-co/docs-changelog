@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-27T00:00:00.000Z
+lastmod: 2026-10-28T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,47 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.227.0 - 2026-10-28
+
+
+### Security
+
+- Updated the bundled Cloud SQL Auth Proxy used for Cloud SQL database
+  branching to 2.26.3, which fixes known vulnerabilities in its Go runtime and
+  dependencies. No known impact or exploitation in mirrord.
+
+
+### Infrastructure
+
+- Added cluster-scoped `create` permission for `featuregatehits` in API group
+  `operator.metalbear.co` to the
+  `mirrord-operator-user`, `mirrord-operator-ci`, and
+  `mirrord-operator-user-basic` ClusterRoles.
+  Custom RBAC must include this permission to allow CLI paid-feature refusal
+  reports.
+
+
+### Added
+
+- Added reporting for paid-feature refusals on the free plan, including
+  refusals detected locally by the CLI,
+  and telemetry when a Teams license falls back to the free plan.
+
+
+### Changed
+
+- The operator no longer sends `operator.clusterName` to MetalBear when
+  telemetry is anonymized or data sharing is off. It is still sent to a
+  self-hosted license server.
+
+
+### Fixed
+
+- The Java Kafka sidecar no longer runs out of memory when it authenticates to
+  MSK with IAM. Kafka clients share AWS credentials providers instead of
+  leaking one per client, and the sidecar exits on `OutOfMemoryError` so that
+  Kubernetes restarts it.
 
 ## 3.226.0 - 2026-10-27
 
