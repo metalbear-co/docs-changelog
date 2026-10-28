@@ -1,7 +1,7 @@
 ---
 title: IntelliJ Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-10-23T00:00:00.000Z
+lastmod: 2026-10-28T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,10 @@ tags:
 description: >-
   The release changelog for the mirrord IntelliJ plugin.
 ---
+
+## 3.83.1 - 2026-10-28
+
+No significant changes.
 
 ## 3.83.0 - 2026-10-20
 
@@ -2216,16 +2220,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord-intellij/blob/69162cfe725d1c87badaef7cd19c7ca1fdafe3a1/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord-intellij/blob/83839b1768809ad2d10c439c59b366fd920fb7dc/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord-intellij/blob/69162cfe725d1c87badaef7cd19c7ca1fdafe3a1/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord-intellij/blob/83839b1768809ad2d10c439c59b366fd920fb7dc/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord-intellij/blob/69162cfe725d1c87badaef7cd19c7ca1fdafe3a1/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord-intellij/blob/83839b1768809ad2d10c439c59b366fd920fb7dc/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -2266,7 +2270,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord-intellij/blob/69162cfe725d1c87badaef7cd19c7ca1fdafe3a1/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord-intellij/blob/83839b1768809ad2d10c439c59b366fd920fb7dc/TELEMETRY.md) for more information.
 
 ### Changed
 
