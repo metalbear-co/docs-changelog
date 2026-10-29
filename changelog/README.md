@@ -13,6 +13,20 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.228.1 - 2026-10-29
+
+
+### Fixed
+
+- A preview session's `Ready` condition now names what keeps its pod from
+  starting (for example an image pull back-off) and carries the failure message
+  once the session fails, instead of staying on "waiting for the preview pod to
+  become ready".
+- The operator no longer uses gigabytes of memory when a namespace holds
+  hundreds of `MirrordSplitConfig`s: checking the configs for conflicts and
+  tearing down their sessions on deletion read from the operator's cache
+  instead of listing every config or split session once per config.
+
 ## 3.228.0 - 2026-10-29
 
 
