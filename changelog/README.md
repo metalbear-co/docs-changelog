@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-28T00:00:00.000Z
+lastmod: 2026-10-29T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,20 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.228.0 - 2026-10-29
+
+
+### Added
+
+- Added support for configuring the agent's HTTP/2 header size limit with
+  `agent.extraConfig.http2_max_header_list_size` in bytes.
+
+
+### Fixed
+
+- SQS and S3 requests retry a dropped connection for longer, so a brief
+  endpoint hiccup no longer fails a queue split session at startup.
 
 ## 3.227.0 - 2026-10-28
 
