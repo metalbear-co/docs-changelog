@@ -1,7 +1,7 @@
 ---
 title: mirrord Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-10-28T00:00:00.000Z
+lastmod: 2026-10-30T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,35 @@ tags:
 description: >-
   The release changelog for the mirrord CLI.
 ---
+
+## 3.282.0 - 2026-10-30
+
+
+### Added
+
+- Experimental: `mirrord up --debug <service>` holds that service's program
+  before its own code runs, until an IDE attaches its debugger and releases it.
+  It's hidden from help on every platform, and may still change.
+- New `mirrord up list` prints every service in an up file as `mirrord up`
+  would run it: its target, mode, command and folder, without touching the
+  cluster. `--format json` prints the same for scripts and IDE extensions.
+
+
+### Changed
+
+- `mirrord up` shows in `mirrord --help` and shell completions on Windows.
+
+
+### Fixed
+
+- Calls that describe a folder above the working directory, such as `stat` and
+  `access`, now stay local by default on Linux and macOS, so resolving a local
+  path no longer fails when the target doesn't have those folders.
+- Honor workload selector expressions when selecting target pods, including
+  workloads with expression-only selectors.
+- mirrord no longer waits for many minutes, printing nothing, when the cluster
+  answers 503 for the mirrord operator. `startup_retry` alone now decides how
+  often those requests are retried.
 
 ## 3.281.0 - 2026-10-28
 
@@ -7849,16 +7878,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/2d4d00bfde3836e0b8b1adee8025762cdd13aaf6/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/354fbbc4f90fd5110213ae6d5556d5269cfd4985/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/2d4d00bfde3836e0b8b1adee8025762cdd13aaf6/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/354fbbc4f90fd5110213ae6d5556d5269cfd4985/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/2d4d00bfde3836e0b8b1adee8025762cdd13aaf6/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/354fbbc4f90fd5110213ae6d5556d5269cfd4985/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -7899,7 +7928,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/2d4d00bfde3836e0b8b1adee8025762cdd13aaf6/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/354fbbc4f90fd5110213ae6d5556d5269cfd4985/TELEMETRY.md) for more information.
 
 ### Changed
 
