@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-10-29T00:00:00.000Z
+lastmod: 2026-11-01T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,53 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.229.0 - 2026-11-01
+
+
+### Infrastructure
+
+- For preview code sync, when `operator.previewEnv` is on:
+
+  - The `mirrord-operator-user` and `mirrord-operator-ci` ClusterRoles, and the
+  namespaced `mirrord-operator-user` Roles, gain `get` and `list` on
+  `previews/sync` in API group `operator.metalbear.co`, the websocket that
+  `mirrord preview sync` pushes code through.
+  - The operator gains `create` and `get` on `persistentvolumeclaims`, `get` on
+  `storageclasses` in API group `storage.k8s.io` and `patch` on `secrets`. It
+  patches only the sidecar TLS Secret that a deleted preview of the same name
+  left behind.
+  - The operator container and the operator Service expose port 4980, which the
+  sync sidecars dial, also outside a multi-cluster setup, and the operator
+  creates the CA Secret of the gateway on that port.
+  - The `PreviewSession` CRD gains `spec.sync` and `status.sync`, and
+  `spec.image` may be empty for a session with `spec.sync`.
+
+
+### Added
+
+- Preview sessions can sync local code: `mirrord preview sync` pushes a
+  service's `sync` directories into its preview pod through the operator, where
+  a sidecar writes them to a code volume that the app container mounts, and a
+  supervisor runs the app and its install command. A sync session without an
+  image of its own, which `mirrord preview sync` creates for a service without
+  `--image`, runs the target's own image. The `operator.preview.codeSync` chart
+  values set where that code lives (a claim of each session, 2Gi by default, or
+  an `emptyDir`), the most bytes that one push may write, the fsGroup of the
+  code volume and the resources of the sidecar. Code sync needs Kubernetes 1.29
+  or newer, on the API server and on the nodes.
+
+
+### Fixed
+
+- A queue split whose forwarder stops now fails its sessions and restores the
+  target, instead of staying active with nothing forwarding messages.
+- Fixed a bypass of workload-scoped mirrord policies, including Deployment
+  policies, when targeting Services or using label selectors.
+- Fixed workload selector expressions being ignored during pod selection,
+  watches, pod replacement, and queue-splitting readiness checks.
+- Target lookups now reject serverless targets, including ones that name a
+  replica.
 
 ## 3.228.1 - 2026-10-29
 
