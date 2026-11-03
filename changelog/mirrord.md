@@ -1,7 +1,7 @@
 ---
 title: mirrord Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-11-01T00:00:00.000Z
+lastmod: 2026-11-03T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,39 @@ tags:
 description: >-
   The release changelog for the mirrord CLI.
 ---
+
+## 3.284.0 - 2026-11-02
+
+
+### Added
+
+- Added `db_branching` to `mirrord-up.yaml` modes: `empty`, `schema` or `all`
+  requests every `MirrordSplitConfig` DB branch with that copy mode, `inherit`
+  with each entry's own, `off` none. An entry named `split`, `replace` or
+  `mirror` may set it for that built-in mode. A mode without it branches like
+  the built-in mode its `incoming` names, and a mode without `queues` splits
+  them like its `incoming`: mirrored with `incoming: mirror`, stolen otherwise.
+  In `mirrord.json`, `feature.db_branches` takes `{ "entries": "*", "copy": {
+  "mode": "schema" } }` to request a copy mode. `mirrord up` fails before
+  starting any service when a mode's `db_branching` or `queues` line can't be
+  served: no usable operator (saying why), no DB branch definitions, an entry's
+  database engine turned off in the operator, a copy mode outside an entry's
+  `allowedModes`, or an operator that splits no queues. It also fails up front
+  when services sharing a DB branch ask for different copy modes.
+- Added custom modes to `mirrord-up.yaml`: a `modes` entry sets `incoming` and
+  `queues`, and is selected by name with `default_mode` or `mirrord up --mode`.
+
+
+### Changed
+
+- On Linux, `experimental.hook_libc_syscall` and
+  `experimental.old_glibc_support` are now enabled by default for OSS users.
+
+
+### Fixed
+
+- Fixed the layer losing its internal proxy connection when an application
+  reuses low fd numbers, such as the s6-overlay `/init` script.
 
 ## 3.283.0 - 2026-11-01
 
@@ -7896,16 +7929,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/c5ab0111a28e24b0acfe86e19e813a687ed427e5/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/c34ca259de7e475116a1fabad2ab36d4b1468d77/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/c5ab0111a28e24b0acfe86e19e813a687ed427e5/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/c34ca259de7e475116a1fabad2ab36d4b1468d77/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/c5ab0111a28e24b0acfe86e19e813a687ed427e5/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/c34ca259de7e475116a1fabad2ab36d4b1468d77/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -7946,7 +7979,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/c5ab0111a28e24b0acfe86e19e813a687ed427e5/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/c34ca259de7e475116a1fabad2ab36d4b1468d77/TELEMETRY.md) for more information.
 
 ### Changed
 
