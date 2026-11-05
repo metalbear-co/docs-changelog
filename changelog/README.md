@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-01T00:00:00.000Z
+lastmod: 2026-11-05T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,86 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.230.0 - 2026-11-04
+
+
+### Infrastructure
+
+- The `PreviewSession` CRD gains `status.sharePort`; apply the updated CRDs
+  with this release for share links to use it.
+
+
+### Added
+
+- Branch config `dbPod.tolerations`, `nodeSelector` and `affinity` for branch
+  pods and Jobs
+- Kafka branching supports Job and CronJob targets, swapping the copy's
+  bootstrap servers for the branch broker.
+- `MirrordSplitConfig` queues accept `keyJqFilter` and `enforceFilter`.
+
+
+### Changed
+
+- A `MirrordSplitConfig` naming a Job or CronJob now matches; queue splits on
+  such a target fail with a clear error instead of being silently dropped, and
+  `podFile` refs report that they need a running pod.
+- Multi-cluster sessions and cross-cluster `mirrord subscribe` streams now
+  require an Enterprise license. A Teams operator with linked clusters
+  configured keeps serving ordinary single-cluster sessions and its own event
+  stream, refuses an explicit request for multi-cluster orchestration, and no
+  longer advertises the multi-cluster features. Copy targets on such an
+  operator are refused as unlicensed, as is a reconnect to a multi-cluster
+  session once the license no longer covers it, and `mirrord subscribe` now
+  needs a valid license like every other operator route.
+- The operator's Kafka clients no longer send client metrics to brokers that
+  subscribe to them (KIP-714) unless `enable.metrics.push` is set to `true` in
+  the `MirrordKafkaClientConfig`. This also lowers operator memory use per
+  Kafka split.
+- The share-ingress chart's default `server.logLevel` shows share-ingress's own
+  logs. Set it to include `share_ingress=debug` to also log the upstream each
+  share link request is forwarded to.
+
+
+### Fixed
+
+- A share link whose target can't be reached fails with a 502 after five
+  seconds instead of hanging until the load balancer in front of share-ingress
+  times out.
+- Cleanup of a temporary broker resource no longer retries every few seconds
+  forever when it cannot succeed (for example when the property list holding
+  the broker credentials was deleted together with its namespace). After an
+  hour in deletion the record reports `Ready: False` with reason `Orphaned` and
+  is retried hourly, so the leak is visible instead of buried in log noise.
+- Ending a queue split now waits for the target to finish restarting instead of
+  force-deleting its patched pods.
+- Kafka split sessions wait for the forwarder's partition assignment before
+  reporting ready.
+- MySQL and MariaDB branch copies no longer fail when another service drops a
+  table mid-dump: the dump runs as a single transaction instead of locking
+  tables, reruns on a vanished table, and `excludeTables` leaves transient
+  tables, and the views reading them, out entirely. Dump args that lock tables
+  (`--lock-all-tables`, `-x`, `--lock-tables`) keep locking, without the single
+  transaction.
+- Outgoing connections to Unix sockets and localhost now always reach the same
+  pod when targeting a workload with multiple pods.
+- Queue split message filters written as `.*<text>.*` use less operator memory
+  per session.
+- Queue splitting across many workloads no longer makes operator memory and
+  Kubernetes API traffic spike when many sessions start or end together.
+- Queue splitting uses less operator memory and fewer Kubernetes API requests
+  when a namespace holds many `MirrordSplitConfig`s.
+- RabbitMQ queue splitting now declares typed queue arguments such as
+  `x-single-active-consumer` (boolean) and `x-message-ttl`/`x-max-length`
+  (integer) with the type RabbitMQ requires, instead of as strings that
+  RabbitMQ rejects. Temporary quorum queues are now deleted at teardown instead
+  of being left on the broker.
+- S3 branches no longer fail with "the operator restarted while the branch
+  bucket was being prepared": a branch whose bucket clone was lost, to an
+  operator restart or to a dropped API reply, is cloned again instead.
+- Share links reach previews whose target's Service exposes the stolen
+  container port under another port (such as `80` for a container's `8080`).
+  This needs both the operator and the share-ingress chart at this version.
 
 ## 3.229.0 - 2026-11-01
 
