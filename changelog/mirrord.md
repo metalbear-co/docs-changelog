@@ -1,7 +1,7 @@
 ---
 title: mirrord Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-11-04T00:00:00.000Z
+lastmod: 2026-11-10T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,50 @@ tags:
 description: >-
   The release changelog for the mirrord CLI.
 ---
+
+## 3.286.0 - 2026-11-10
+
+
+### Added
+
+- Choose one queue-consuming cluster with `consumerCluster` in multi-cluster
+  queue splitting.
+- Session monitor talks to the Firefox build of the browser extension through a
+  page message relay.
+
+
+### Changed
+
+- A Kafka `payload_protobuf.schema_file` that does not exist is reported with
+  the absolute path mirrord looked for it at, and an import that can't be found
+  is reported with the directories it was looked up in.
+- Changed the `sync` settings of `mirrord-up.yaml`: `sync.install` is now
+  `sync.prepare`, its `on_change` is now `triggered_by`, and
+  `sync.restart_on_change` is now `sync.run.restart`, which takes `on_prepare`
+  (the default) or `on_sync`. `sync.run` no longer defaults to the service's
+  `run.command`, so a service without it runs its image's own command, for
+  example nginx serving the synced files. `sync.prepare.directory` no longer
+  defaults to `sync.run.directory`. `mirrord preview sync` and `mirrord preview
+  status` say "sync" instead of "push" in their output, as in the status line
+  `last sync 2m ago`.
+- `mirrord dump` without `--ports` now dumps only the ports declared on the
+  target container, skipping other containers in the pod and non-TCP ports.
+  Sessions where those ports aren't known, such as copy target and
+  multi-cluster, now need `--ports`.
+
+
+### Fixed
+
+- A Kafka `payload_protobuf` that gives a relative `schema_file` and an
+  absolute `include_directories` entry, or the other way round, now compiles
+  the same as one with only relative paths.
+- Fixed `mirrord preview sync` hanging with two or more services in
+  `mirrord-up.yaml`.
+- Show the destroy command when a database branch fails
+- The `validate_config` tool of `mirrord mcp` takes the directory the user runs
+  mirrord from, and resolves a relative `payload_protobuf.schema_file` and
+  `include_directories` from it. Before, it resolved the path from the working
+  directory of `mirrord mcp`, which the MCP client chooses.
 
 ## 3.285.0 - 2026-11-04
 
@@ -7949,16 +7993,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/a98a5ffc28e558dcfa1968c7d19b759532908b1f/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/a98a5ffc28e558dcfa1968c7d19b759532908b1f/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/a98a5ffc28e558dcfa1968c7d19b759532908b1f/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -7999,7 +8043,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/a98a5ffc28e558dcfa1968c7d19b759532908b1f/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/TELEMETRY.md) for more information.
 
 ### Changed
 
