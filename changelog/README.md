@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-05T00:00:00.000Z
+lastmod: 2026-11-11T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,84 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.231.0 - 2026-11-11
+
+
+### Infrastructure
+
+- The `PreviewSession` CRD's `spec.sync` replaces `runCommand`, `workingDir`,
+  `install` and `restartOnChange` with `run` (`command`, `workingDir`,
+  `restart`) and `prepare` (`command`, `workingDir`, `triggeredBy`, `persist`),
+  and `status.sync.install` is now `status.sync.prepare`. A session that an
+  earlier `mirrord preview sync` started loses its run command, and runs its
+  image's own command once the operator restarts, so upgrade the CLI with the
+  operator and run `mirrord preview sync` again.
+
+
+### Added
+
+- A preview with code sync but without `sync.run` in `mirrord-up.yaml` runs its
+  image's own command on the synced files, with the container's own probes, for
+  example nginx serving a site that is built locally.
+- `POST /splitconfigdbbranches` applies a copy mode the session requests to
+  each requested `dbBranches` entry, replacing only its `copy.mode`, and
+  refuses one missing from the entry's `copy.allowedModes`. Advertised as
+  `DbBranchesSplitConfigCopyMode`.
+
+
+### Changed
+
+- A Kafka queue entry whose topics come from one environment variable value,
+  such as a JSON array read with `valueSelector: ".[]"` or a list split with
+  several `valuePattern`s, now fails instead of splitting only the first topic.
+  Each topic needs its own environment variable, or a JSON object of topics.
+- A `scaleTriggerOverrides` entry that uses `{{<id>.queue}}` of a Kafka queue
+  entry with several topics is now skipped with a warning, since each of the
+  entry's topics gets its own fallback.
+- A queue split of two Kafka queue entries that resolve to the same topic,
+  including two topic entries of one `MirrordKafkaTopicsConsumer`, now fails
+  instead of feeding both entries from one fallback topic, which broke after an
+  operator restart.
+- The operator's hourly telemetry heartbeat now includes its memory and CPU
+  usage and the number of sessions, agents, copy targets, split sessions, split
+  configs, database branches, and preview sessions it is handling. It contains
+  only these numbers, no names, and on Enterprise licenses
+  `operator.disableTelemetries` turns it off as before.
+
+
+### Fixed
+
+- A Kafka queue entry in a `MirrordSplitConfig` now splits every topic its
+  references resolve to, not only the first one.
+- A Kafka queue entry whose group or application id references resolve to
+  different values now fails to split instead of splitting under the first one.
+- A queue split whose `MirrordSplitConfig` or target changed its queues,
+  topics, subscriptions or consumer groups while the operator was down is now
+  rebuilt when the operator restarts, ending its sessions so their clients
+  start over, instead of resuming with the old ones. A session asking for a
+  queue added meanwhile rebuilds the split instead of failing. This covers
+  splits started by this operator version or later.
+- A queue splitting session that fails because its target or split config
+  disappeared, or because the split's queues changed, now has its own temporary
+  queues, topics and subscriptions deleted. Before, they could stay on the
+  broker for good, for example when the target's namespace was deleted while
+  the session ran.
+- An operator configured with a cloud API key and no license key now syncs the
+  organization's active users from MetalBear, as an operator with a license key
+  does. Seat limits now count every user in the organization rather than only
+  those the operator pod had seen since it started, users who stopped using
+  mirrord free their seats again, and `mirrord operator status` reports the
+  organization's active user counts.
+- Fixed Azure Service Bus preview recovery after an operator restart when
+  multiple topics use the same subscription name.
+- Fixed preview queue splits ending when the operator restarts.
+- Kafka branching now sets a topic's start offset for every group or
+  application id its queue entry's references resolve to, instead of only the
+  first, and fails for an entry with several topics and several ids instead of
+  reading them all under the first id.
+- Reject single-cluster sessions on a management-only multi-cluster Primary
+  with a clear error.
 
 ## 3.230.0 - 2026-11-04
 
