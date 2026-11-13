@@ -1,7 +1,7 @@
 ---
 title: mirrord Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-11-10T00:00:00.000Z
+lastmod: 2026-11-13T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,56 @@ tags:
 description: >-
   The release changelog for the mirrord CLI.
 ---
+
+## 3.287.0 - 2026-11-12
+
+
+### Added
+
+- Added `mirrord exec --share` and the `share` option, which print a temporary
+  HTTPS link to the service running on your machine, through the share-ingress
+  of a Team or Enterprise operator. Requests that don't reach your machine,
+  such as those sent before your application listens, reach the target's
+  service running in the cluster instead. A shared session steals only the
+  requests that carry its session key in `baggage`, or that match its
+  `http_filter`. Sharing needs permission to get `sessions` in the
+  `operator.metalbear.co` API group, which the operator's chart grants to
+  mirrord users.
+- Added the `agent.http_detect_inactive_ports` option, off by default. It makes
+  the agent run HTTP detection on connections that arrive while their port has
+  no subscriber, so a later subscription's HTTP filters apply to them.
+- The agent reports the bytes of mirrord-protocol messages it holds in memory,
+  in `mirrord_agent_buffered_messages_bytes`, and the bytes held by its
+  outgoing traffic throttles, in `mirrord_agent_outgoing_throttle_permits`.
+
+
+### Changed
+
+- The agent logs a warning when a connection on a port stolen with an HTTP
+  filter is passed to the target unfiltered, with the reason: HTTP detection
+  timed out, the traffic isn't HTTP, or TLS negotiated a protocol other than
+  HTTP.
+- `mirrord wizard` now generates a `mirrord-up.yaml` instead of a
+  `mirrord.json`, asking the same questions as `mirrord up init`. `mirrord
+  wizard --tui` asks them in the terminal.
+
+
+### Fixed
+
+- Fixed concurrent `mirrord ci start` and `mirrord ci container` sessions
+  failing with "CI state file is locked by another writer". Sessions now wait
+  up to 5 seconds for each other, and `mirrord ci stop` can find the processes
+  of every session.
+- The install script stops with a clear message when it cannot look up the
+  latest version on GitHub, instead of failing with a 404 that looks like a
+  missing release.
+- `mirrord exec` with a serverless target shows its progress while it waits for
+  the target's agent, and fails with an error that names the cause instead of
+  appearing to hang.
+- jq filter time limits no longer count the wait for a thread
+- mirrord correctly refuses to start a session with a serverless target when
+  `feature.db_branches`, `feature.split_queues`, or `feature.copy_target` is
+  set.
 
 ## 3.286.0 - 2026-11-10
 
@@ -7993,16 +8043,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/e1a5d8ea5d2cb74cea4a0ce714fc0887f39fd183/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/e1a5d8ea5d2cb74cea4a0ce714fc0887f39fd183/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/e1a5d8ea5d2cb74cea4a0ce714fc0887f39fd183/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -8043,7 +8093,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/d70679e38011c7e72bc420258c1f46dd8ff6a14e/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/e1a5d8ea5d2cb74cea4a0ce714fc0887f39fd183/TELEMETRY.md) for more information.
 
 ### Changed
 
