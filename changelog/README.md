@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-11T00:00:00.000Z
+lastmod: 2026-11-14T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,115 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.232.0 - 2026-11-14
+
+
+### Security
+
+- Multi-cluster child session connects count only for callers allowed to create
+  cluster sessions.
+
+
+### Infrastructure
+
+- The `mirrord-operator-envoy-remote` role gains `patch` on
+  `mirrordclustersessions`, so the Primary can write a consumer cluster's split
+  details on the Default cluster's child session.
+- The share-ingress cluster role gets get, list and watch on
+  `mirrordclustersessions` cluster-wide to route share links, so share-ingress
+  can read each session's owner. The mirrord user roles get the `get` verb on
+  `sessions` in the `operator.metalbear.co` API group, which `mirrord exec
+  --share` uses to read its link.
+
+
+### Added
+
+- Added share links for local sessions: with share-ingress set up, `mirrord
+  exec --share` prints an HTTPS link that reaches the developer's local version
+  of the target through the target's Service of the same name.
+- Kafka `jq_filter` now works with the Java client sidecar.
+- Multi-cluster queue splitting can be pinned to one cluster with
+  `MirrordSplitConfig.spec.consumerCluster`: only that cluster splits the
+  queues and patches its workload, and the local application still gets the
+  split queue names through the Default cluster.
+- Queue splitting reads config files mounted from Secret volumes too; a
+  `secret` source needs `valueSelector` or `valuePattern`.
+- The operator reports the size of its Kubernetes caches, in
+  `mirrord_operator_cache_size_bytes` and `mirrord_operator_cache_objects`, and
+  the bytes of mirrord-protocol messages queued for each user's sessions, in
+  `mirrord_operator_buffered_messages_bytes`.
+
+
+### Changed
+
+- A split session's version of a config file from a `podFile` source is kept in
+  a Secret owned by the session instead of the session's status.
+- Default branch images moved to supported versions: MySQL 8.4, ClickHouse
+  26.8, DynamoDB local 3.3.2, Spanner emulator 1.5.59, Flyway 13, Kafka 4.4.0.
+  Before upgrading, an install whose `dbPod.image.registry` or
+  `initImage.registry` points at a mirror needs the new tags mirrored, or
+  `version` pinned on every branch; otherwise branches with no `version`, and
+  pods rebuilt after node loss, fail with `ImagePullBackOff`. A
+  `migrationImages.flyway.registry` mirror always needs the `13` tag, whatever
+  the branches pin, or Flyway `path` migrations without their own `image` fail
+  the same way. A MySQL registry pointed at `mysql/mysql-server` has no `8.4`
+  tag; point it at `mysql` or pin `version: "8.0"`. A source on the old default
+  (MySQL 8.0, ClickHouse 24.8) whose branches set no `version` now gets a newer
+  branch, and mirrord warns about the version mismatch on every session of such
+  a branch; pin `version` to keep the branch matching the source. MySQL 8.4
+  removed options that MySQL 8.0 took, among them
+  `--default-authentication-plugin` (which the chart example and the 3.197.0
+  release notes once suggested for `dbServerArgs`), `--skip-host-cache`,
+  `--expire-logs-days` and `--binlog-transaction-dependency-tracking`; an 8.4
+  branch exits on any of them, so drop from `dbServerArgs` what 8.4 removed, or
+  pin `version: "8.0"` on the branches. The 8.4 replacement for
+  `--default-authentication-plugin=mysql_native_password` is the pair
+  `--loose-mysql-native-password=ON` and
+  `--authentication-policy=*:mysql_native_password`: 8.4 refuses the policy
+  unless the plugin is loaded, and MySQL 8.0 and 9 exit on the policy, so set
+  the pair only where every branch runs 8.4.
+- Java client Kafka forwarding for plain consumers keeps each record's source
+  timestamp, matching Kafka Streams and the librdkafka client. A broker with
+  `log.message.timestamp.before.max.ms` set rejects an old backlog, which stops
+  the forwarder.
+- The `mssql-tools` image no longer ships Microsoft's `sqlcmd` and `bcp`, whose
+  license forbids publishing them. MSSQL branches export table data with the
+  `bcp` in the branch's own SQL Server image, in a new `mssql-branch-dump-data`
+  init container, so a custom branch image needs `bcp` to copy table data. The
+  operator pulls `ghcr.io/metalbear-co/mssql-tools:<operator version>` instead
+  of `:latest`.
+- `consumerCluster` refuses `secret` volume and `podFile` sources off the
+  Default cluster. The primary operator does the refusing, so upgrade it before
+  the other clusters: an older primary lets such a split start, and the local
+  application then reads the original queue names.
+
+
+### Fixed
+
+- A Kafka `jq_filter` on the Java client that calls a function its jq 1.6
+  engine lacks now fails the session at start with the function named, instead
+  of matching nothing.
+- Agent pods left behind by a lost create call are removed after the startup
+  timeout.
+- Agent startup timeouts now say why the scheduler rejected the agent pod.
+- DNS lookups, file opens and new outgoing connections made while a session has
+  no live mirrord-agent, for example while a target pod is being replaced, now
+  wait for the next agent instead of failing right away.
+- Fixed the Java client sidecar crashing on headers without a value.
+- Kafka mirror mode now works with the Java client sidecar.
+- MySQL branches load the `mysql_native_password` plugin through the settings
+  file every sourced branch starts with (`loose-mysql-native-password=ON`,
+  which MySQL 8.0 and 9 ignore), so a declared user that authenticates with
+  that plugin on the source (the default on RDS MySQL 8.0) can log in to a
+  MySQL 8.4 branch instead of failing it (`roles: full`) or being left without
+  a login (`roles: empty`). Other copied accounts stay locked as before. A
+  `dbServerArgs` entry such as `--mysql-native-password=OFF` still wins over
+  the file. The file reaches the server on images that read
+  `/etc/mysql/conf.d`, as the official `mysql` image does; a branch on an image
+  that does not (Percona's, Oracle's `community-server`) needs
+  `--loose-mysql-native-password=ON` in `dbServerArgs`.
+- jq message filters no longer time out while waiting for a thread
 
 ## 3.231.0 - 2026-11-11
 
