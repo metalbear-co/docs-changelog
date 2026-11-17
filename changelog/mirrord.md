@@ -14,6 +14,33 @@ description: >-
   The release changelog for the mirrord CLI.
 ---
 
+## 3.290.0 - 2026-11-17
+
+
+### Added
+
+- `mirrord preview start` and `mirrord preview up` can now run without a target
+  to provision branch databases alone: with `feature.db_branches` and no
+  `target`, the operator creates the branches and keeps them for the preview's
+  TTL. A targetless `mirrord exec` with branches the operator provisions
+  creates them the same way and gets their connection values in its
+  environment. Branch connection values must then come from a literal, a
+  Kubernetes Secret, or a ConfigMap named directly, since there is no target
+  pod to read them from. Secret manager sources and `iam_auth` work without a
+  target only for S3 and turbopuffer branches, and Spanner branches still need
+  a target.
+
+
+### Fixed
+
+- The serverless workload companion and the CLI's sessions-manager connection
+  trust the CA certificates bundled into mirrord, alongside the system's when
+  it has any, so application images no longer need `ca-certificates` installed
+  to connect to MetalBear Cloud. The data-plane connection trusts the system's
+  CA certificates too, so a sessions-manager behind a private CA or a
+  transparently intercepting proxy no longer passes registration only to fail
+  every data-plane connection.
+
 ## 3.289.0 - 2026-11-16
 
 
@@ -8074,16 +8101,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/36b4dd0c13d703b5d3874d3b78165768bd211da4/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/4bc2f3af00d2f4acb272efe2a27071956ca40b71/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/36b4dd0c13d703b5d3874d3b78165768bd211da4/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/4bc2f3af00d2f4acb272efe2a27071956ca40b71/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/36b4dd0c13d703b5d3874d3b78165768bd211da4/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/4bc2f3af00d2f4acb272efe2a27071956ca40b71/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -8124,7 +8151,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/36b4dd0c13d703b5d3874d3b78165768bd211da4/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/4bc2f3af00d2f4acb272efe2a27071956ca40b71/TELEMETRY.md) for more information.
 
 ### Changed
 
