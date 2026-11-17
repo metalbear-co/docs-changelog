@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-14T00:00:00.000Z
+lastmod: 2026-11-17T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,67 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.233.0 - 2026-11-16
+
+
+### Added
+
+- The license server serves an OpenAPI description of its report, adoption and
+  deployment endpoints at `/api/v1/openapi.json`.
+- The operator now logs a panic as an error event, so it appears in JSON and
+  OTLP logs and not only as plain text on stderr.
+
+
+### Changed
+
+- A Kafka queue split using the librdkafka client gives up on a message it
+  cannot deliver after about fifteen minutes (ten minutes of retries after
+  librdkafka's default five-minute `message.timeout.ms`), then ends and hands
+  the target back its own topics.
+
+
+### Fixed
+
+- A CronJob preview that fails because its CronJob name is already taken no
+  longer suspends the CronJob that holds the name.
+- A Kafka queue split no longer fails every session on it when one session
+  leaves while the brokers are unreachable.
+- A `mirrord exec` session or preview environment whose queue split cannot be
+  resumed after an operator restart, including when its Kafka branch fails to
+  rejoin, now ends with the split's error.
+- A `mirrord exec` session, preview environment, or copy target whose queue
+  split fails now hears of it even when the Kubernetes API is briefly
+  unreachable or the operator restarts first.
+- A copy target whose queue split fails while it runs, or whose split ends
+  because its `MirrordSplitConfig` is deleted, now ends every session running
+  on it with the reason and removes the copy pod, so the workload goes back to
+  normal; a session that connects while the copy pod is going away is refused.
+- A failed CronJob preview now also stops the jobs it had started and that have
+  not finished, instead of letting them run on.
+- A preview environment now fails, and a `mirrord exec` session ends with a
+  reason, when its split ends because its `MirrordSplitConfig` is deleted.
+- A preview whose queue split fails is now marked failed instead of staying
+  ready
+- A session that fails to join a queue split no longer leaves message filters
+  behind, so the deployed consumer keeps getting the messages they matched and
+  the split's other sessions keep running.
+- Failed branch messages keep the database container's last output when it
+  exits with code 3.
+- Fixed Azure Service Bus queue splitting moving messages to the dead-letter
+  queue of a split queue or subscription when the operator's connection to
+  Service Bus kept dropping: the operator now retries a failed forward before
+  it gives the message back to Service Bus.
+- Fixed an Azure Service Bus queue split stopping, and failing its sessions,
+  when the operator's connection to Service Bus dropped while it forwarded a
+  message.
+- Kafka splits no longer fail when the brokers become unreachable for a while
+- MSSQL branches wait up to three minutes for their SQL Server to start and
+  name its log on failure.
+- Operator-hosted serverless sessions (`operator.sessionsManager: true`) now
+  require the Enterprise plan; with a Team or Free license the Operator refuses
+  them as not licensed and `mirrord operator status` hides the feature.
+  MetalBear Cloud serverless sessions are unaffected.
 
 ## 3.232.0 - 2026-11-14
 
