@@ -13,6 +13,102 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.234.0 - 2026-11-17
+
+
+### Added
+
+- Preview environments can now run without a target to provision branch
+  databases alone: the session registers on its branches and keeps them alive
+  for its TTL, running no pod. A branch pod takes its connection values from
+  literals, Kubernetes Secrets, or ConfigMaps named directly, since there is no
+  target pod to read them from or to borrow a cloud identity from; S3 and
+  turbopuffer branches, which run no pod, keep their secret manager sources
+  too, and Spanner branches still need a target.
+
+
+### Changed
+
+- A `MirrordSplitConfig` with BullMQ queues now needs `{{RANDOM}}` in its
+  `tmpNameTemplate`, as it already does for RabbitMQ, SQS and Kafka queues, so
+  that two splits of the same queue never get the same temporary queue names. A
+  config whose template lacks it is rejected. Before you upgrade, end the
+  sessions on such a config and let its split end: the upgraded operator can't
+  resume a split that runs on such a template, and leaves the Redis keys of its
+  main queue behind.
+- To keep the messages left in a GCP Pub/Sub split's temporary subscription
+  when the split ends, the operator needs `pubsub.subscriptions.get` and
+  `pubsub.subscriptions.consume` on the temporary subscriptions it creates.
+  Without them, it deletes the subscription together with those messages, as
+  before.
+
+
+### Fixed
+
+- A Temporal task that matches a session's filter just as the session ends now
+  goes to the deployed worker. Before, it waited in a virtual task queue that
+  no worker polled, until Temporal timed it out.
+- A Temporal worker now receives a task right away even when another worker on
+  the same virtual task queue closed its poll earlier, for example because its
+  pod restarted. Before, the task could wait up to 20 seconds.
+- Deleting a `MirrordSQSSession` or `MirrordRMQSession` that an older operator
+  left behind now ends its queue split and restores the target. Before, the
+  split kept running, with the target patched and its temporary queues on the
+  broker, and the deleted session could stay in `Terminating`. This affects
+  clusters where the operator was upgraded while an SQS or RabbitMQ split
+  session was running.
+- Ending an Azure Service Bus split in the queue model no longer deletes the
+  scheduled messages in the temporary queue that the deployed workload reads.
+  The split now waits until they are due and the workload has read them, so
+  with `drainTimeout` unset, a message scheduled far ahead keeps the target
+  patched until it is due. Set `drainTimeout` to limit the wait.
+- In a multi-cluster session, the other workload clusters no longer delete the
+  per-session Azure Service Bus queue or BullMQ queue that the Default cluster
+  created for the session. Before, a session that ended or failed on another
+  workload cluster deleted that queue while the Default cluster still routed
+  messages into it.
+- Queue splitting now deletes the temporary queues, topics, subscriptions,
+  streams and other broker resources it creates when a session or split ends,
+  also when a session fails to start, after an operator restart, and when the
+  target's namespace is deleted. A BullMQ main queue or GCP Pub/Sub main
+  subscription that still holds messages the workload hasn't read when the
+  split ends is kept instead of deleted with those messages, and is deleted
+  once it is empty. Kafka fallback topics and temporary consumer groups that
+  pods not moved back to the original topics within 10 minutes may still read
+  are deleted once those pods are gone. If the `MirrordPropertyList` or
+  `MirrordKafkaClientConfig` of such a queue, subscription or topic is gone by
+  then, for example with the target's namespace, the operator can't reach it
+  any more, and it must be deleted by hand.
+- Redis Pub/Sub queue splitting of a sharded channel (`appConfig.shardChannel`)
+  now forwards messages. Before, the operator never finished subscribing to the
+  channel, so neither the deployed workload nor the sessions received any of
+  its messages.
+- Restart the operator when its session controllers stall.
+- The operator no longer deletes a GCP Pub/Sub split's temporary subscription,
+  together with the messages the deployed workload hasn't read, when getting an
+  access token takes longer than 2 seconds. It now gets the token before it
+  checks the subscription for messages. It also keeps the subscription when
+  that check fails for a reason other than missing permissions, and deletes it
+  once it is empty.
+- When a Redis Pub/Sub split ends, the operator now closes its subscriber
+  connections to Redis. Before, it kept one open per channel until the operator
+  restarted.
+- When a Temporal split fails to start, for example because patching the target
+  fails, the operator now stops polling the real task queue. Before, it kept
+  taking tasks from that queue into a buffer that no worker read, so they
+  waited until Temporal timed them out, and each retry of the session started
+  another poller.
+- While an ending Azure Service Bus split waits for the deployed workload to
+  read the messages left for it, the operator no longer sends those messages to
+  the dead-letter queue. Each check for messages counted as a delivery, so with
+  the default `MaxDeliveryCount` of 10, Service Bus dead-lettered a message
+  that the workload hadn't read within about 50 seconds, and in the queue model
+  the operator then deleted it with the temporary queue.
+- With session key header injection on, the deployed Temporal worker no longer
+  receives activity tasks that carry a session's `mirrord-key` header. Before,
+  a task that matched a session but went to the deployed worker, because the
+  session ended or its buffer was full, carried that header.
+
 ## 3.233.0 - 2026-11-16
 
 
