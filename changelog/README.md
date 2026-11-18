@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-17T00:00:00.000Z
+lastmod: 2026-11-18T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,46 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.235.0 - 2026-11-18
+
+
+### Security
+
+- Preview environments no longer write the values of credential headers, such
+  as `Authorization`, `Cookie` and API key headers, to the operator's logs when
+  they receive an HTTP request. With `operator.hideHeadersAndProperties` set to
+  `true`, these log lines are left out entirely.
+
+
+### Infrastructure
+
+- Added SSO setup to the Helm chart: an optional Ingress exposes the operator
+  API to OIDC logins at a public URL
+
+
+### Changed
+
+- Connect failures log the target, CLI version, session mode and multi-cluster
+  choice, and client-side refusals log at info.
+
+
+### Fixed
+
+- A filtered PostgreSQL table whose last row ends in an empty value no longer
+  fails the branch with "missing data for column", and trailing spaces in the
+  last value are kept.
+- Documented that `mssqlBranching` accepts the SQL Server license terms.
+- Filtered PostgreSQL copies of tables with generated columns no longer fail.
+- Fixed RabbitMQ splitting needlessly requeueing messages held for a missing
+  session queue.
+- Outgoing connections to cloud metadata and identity endpoints, such as the
+  instance metadata service at `169.254.169.254`, and to other link-local
+  addresses now always leave from the same pod when targeting a workload with
+  multiple pods. Node instance role credentials obtained through AWS IMDSv2 now
+  work in such sessions.
+- PostgreSQL branches from sources on 14.25, 15.20, 16.16, 17.12, 18.7 or later
+  now come up on branch images from before those releases.
 
 ## 3.234.0 - 2026-11-17
 
