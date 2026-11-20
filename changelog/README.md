@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-18T00:00:00.000Z
+lastmod: 2026-11-20T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,56 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.236.0 - 2026-11-20
+
+
+### Security
+
+- Moved the `operator-kafka-proxy` image to the Debian 13 distroless base and
+  raised its `netty` and `jackson-databind` dependencies to fixed releases,
+  closing the critical `libbrotli1`, `netty-handler` and `jackson-databind`
+  vulnerabilities that image scans reported. The JVM truststore now comes from
+  the Debian `ca-certificates` package instead of the Temurin bundled store,
+  which drops six roots the previous image trusted (OISTE Server Root ECC G1
+  and RSA G1, SwissSign RSA TLS Root CA 2022 - 1, TrustAsia TLS ECC and RSA
+  Root CA, emSign ECC Root CA - G3) and re-adds ten it did not (Baltimore
+  CyberTrust Root, GlobalSign Root CA, Entrust.net Certification Authority
+  (2048), Go Daddy Class 2, Starfield Class 2, XRamp Global CA and the four
+  CommScope Public Trust roots), so brokers whose certificates chain only to
+  one of the dropped roots, or that want to pin specific roots, need an
+  explicit `ssl.truststore.*` configuration.
+
+
+### Added
+
+- The operator logs, for each target pod of a session, when an agent loads,
+  fails to load or is lost, and each port that the agent subscribes.
+
+
+### Changed
+
+- A preview session's operator log lines name the preview's key as well as its
+  target.
+- Bumped the bundled Cloud SQL Auth Proxy to 2.28.0.
+
+
+### Fixed
+
+- Branches of ClickHouse Cloud databases now start: their `Shared*MergeTree`
+  tables get the matching plain `*MergeTree` engine.
+- ClickHouse branches now copy column names and comments that contain text like
+  `ReplicatedMergeTree('…', '…')` as they are, instead of rewriting them along
+  with the table engine.
+- ClickHouse branches now copy rows when the source user's settings profile
+  sets `asterisk_include_materialized_columns` or
+  `asterisk_include_alias_columns`.
+- ClickHouse branches now copy the rows of tables whose column names contain a
+  backtick or a backslash.
+- ClickHouse branches now start when a copied table has no rows.
+- Database branch init containers retry a source connection that fails for a
+  moment instead of failing the branch.
+- Liquibase branch migrations fail fast on a changelog that cannot apply.
 
 ## 3.235.0 - 2026-11-18
 
