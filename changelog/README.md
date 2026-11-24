@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-20T00:00:00.000Z
+lastmod: 2026-11-24T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,37 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.237.0 - 2026-11-24
+
+
+### Security
+
+- Queue splitting jq filters can no longer call `env`, `halt` or `halt_error`,
+  which let a filter read the operator's environment variables or stop the
+  operator process. A filter that calls one of them is rejected with an
+  `Undefined filter` error.
+
+
+### Fixed
+
+- ECS services with a container health check no longer lose their mirrord
+  sessions with `serverlessdataplanes "<id>" not found`. Health checks and `aws
+  ecs execute-command` sessions no longer start a workload-companion of their
+  own that took over from the application's.
+- Fixed a Redis Pub/Sub split that stopped forwarding messages for good when
+  the Redis server accepted the connection of an exact or pattern subscription
+  but never answered. The operator now gives up after 30 seconds and retries.
+- Kubernetes usernames that differ only in letter case count as one user for
+  Kubernetes-user seat tracking and license-server usage reports.
+- Operators configured with only a cloud API key now report CI and preview
+  sessions to the cloud. Stopped sessions can be deleted even when the cloud
+  API key has been revoked.
+- Retry Kubernetes 410 expiry errors during split-session readiness waits
+  within the original initialization timeout.
+- Show underlying Kubernetes API diagnostics when multicluster router creation
+  fails and in queue-splitting preview failures reported by `mirrord preview
+  status`.
 
 ## 3.236.0 - 2026-11-20
 
