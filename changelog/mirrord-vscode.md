@@ -1,7 +1,7 @@
 ---
 title: VS Code Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-11-05T00:00:00.000Z
+lastmod: 2026-11-25T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,20 @@ tags:
 description: >-
   The release changelog for the mirrord VS Code extension.
 ---
+
+## 3.75.1 - 2026-11-25
+
+
+### Fixed
+
+- Fixed a `MIRRORD_CONFIG_FILE` path from the launch configuration resolving to
+  the wrong file on Windows, when relative, or with a `#` in it. Renaming or
+  deleting a folder no longer changes the active config when the folder name is
+  only a prefix of the folder that holds it. `MIRRORD_CONFIG_FILE` is now read
+  as a file path, so percent escapes such as `%20` in it are no longer decoded.
+  [#288](https://github.com/metalbear-co/mirrord-vscode/issues/288)
+- Active config picker now also lists `.json`/`.toml`/`.yml`/`.yaml` files
+  whose name starts with `mirrord`, e.g. `mirrord-with-queue-split.json`.
 
 ## 3.75.0 - 2026-11-05
 
@@ -1900,16 +1914,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord-vscode/blob/f2eb7eacc95a1c4cd8b41c402492ae65566fe03e/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord-vscode/blob/47e131c19b5a7f60ecaba1ed66ef99f7bc7f7fcd/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord-vscode/blob/f2eb7eacc95a1c4cd8b41c402492ae65566fe03e/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord-vscode/blob/47e131c19b5a7f60ecaba1ed66ef99f7bc7f7fcd/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord-vscode/blob/f2eb7eacc95a1c4cd8b41c402492ae65566fe03e/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord-vscode/blob/47e131c19b5a7f60ecaba1ed66ef99f7bc7f7fcd/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -1950,7 +1964,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord-vscode/blob/f2eb7eacc95a1c4cd8b41c402492ae65566fe03e/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord-vscode/blob/47e131c19b5a7f60ecaba1ed66ef99f7bc7f7fcd/TELEMETRY.md) for more information.
 
 ### Changed
 
