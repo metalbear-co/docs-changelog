@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-24T00:00:00.000Z
+lastmod: 2026-11-25T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,38 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.238.0 - 2026-11-25
+
+
+### Infrastructure
+
+- Member clusters installed with `multiClusterMemberGcpPrincipal` get two new
+  ClusterRoleBindings, `mirrord-operator-envoy-gcp` and
+  `mirrord-operator-envoy-remote-gcp`, which bind the primary's Google identity
+  (a Google service account email, or a workload identity federation
+  `principal://`) to the existing `mirrord-operator-envoy` and
+  `mirrord-operator-envoy-remote` ClusterRoles. Groundwork for the `gke` auth
+  type, which is not yet supported.
+
+
+### Fixed
+
+- Fixed filtered steal sessions that stopped stealing from a target pod after
+  an agent took longer than the agent `startup_timeout` to start. The operator
+  now deletes the agent pod of each timed-out start attempt, so it cannot start
+  later and remove the traffic redirection of the agent in use.
+- On ECS, a process that loads mirrord in the application container while the
+  workload-companion still listens on the connection handoff socket set in
+  `MIRRORD_REMOTE_HANDOFF_SOCKET` no longer deletes that socket and starts a
+  workload-companion of its own. When `MIRRORD_REMOTE_HANDOFF_SOCKET` names a
+  file that isn't a socket, mirrord fails with an error instead of deleting it.
+- Requests to an ECS service now reach your local process when the application
+  accepts them in workers that run as another user, such as the `www-data`
+  workers of nginx and php-fpm. Those workers used to serve every request
+  themselves.
+- The MSSQL tools image no longer ships golang.org/x/net and
+  golang.org/x/crypto versions that vulnerability scanners flag as critical.
 
 ## 3.237.0 - 2026-11-24
 
