@@ -1,7 +1,7 @@
 ---
 title: Operator Changelog
 date: 2023-08-15T00:00:00.000Z
-lastmod: 2026-11-25T00:00:00.000Z
+lastmod: 2026-11-26T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -12,6 +12,73 @@ tags:
 description: >-
   The release changelog for the mirrord operator.
 ---
+
+## 3.239.0 - 2026-11-26
+
+
+### Infrastructure
+
+- Added the `sso.scopes` chart value for the login scopes.
+- For `mirrord preview wake`, when `operator.previewEnv` is on, the
+  `mirrord-operator-user` and `mirrord-operator-ci` ClusterRoles, and every
+  `roleNamespaces` Role, gain `get` and `list` on `previews/wake` in API group
+  `operator.metalbear.co`. In a multi-cluster setup, the
+  `mirrord-operator-envoy-remote` ClusterRole gains `get` on `previews/wake` in
+  API group `operator.metalbear.co`, which the primary uses to wake the copies
+  of a preview on each workload cluster.
+- User roles may list namespaces through the operator API; the operator may
+  list namespaces.
+- User roles may read mirrord profiles through the operator API.
+
+
+### Added
+
+- Added browser login for `mirrord login --url` on SSO operators.
+- SSO logins own sessions and count seats like kubeconfig logins
+- The license server and its dashboard list the clusters whose operators report
+  a cluster id, with the time of their last report, and let admins name them.
+  Requires operator 3.182.0 or later.
+- The operator serves `mirrord preview wake`: it wakes every preview under a
+  key, keeps them from idling while the command waits for their pods, and on a
+  multi-cluster primary also wakes each preview's replicas on the other
+  workload clusters. A replica cluster whose operator can't be reached or is
+  too old to wake previews is reported to the CLI as a warning.
+- The usage, trends and topology reports accept a `cluster_id` parameter that
+  limits them to one cluster, and such a report names the cluster in
+  `clusterId`. On a self-hosted license server, a report on one cluster leaves
+  out the CI and preview environment figures, because they are stored without
+  their cluster.
+- mirrord ls offers an SSO user the namespaces they may list targets in.
+- mirrord sessions and operator commands run through an SSO login.
+
+
+### Fixed
+
+- A preview session whose `idle.wakeTimeoutSecs` is too large no longer fails
+  when it wakes, or when an operator restart finds it waking: the operator caps
+  the wake timeout instead of crashing the preview's task.
+- A preview that failed because one of its multi-cluster replicas or its queue
+  splitting failed no longer comes back and keeps running: once a preview is
+  marked failed, the operator keeps it failed.
+- Fixed MongoDB branches failing with "Database name not found in URL path"
+  when the connection URL has no database in its path, such as an Atlas
+  connection string: the branch now copies the database the `name` field names.
+- MongoDB branches no longer fail when the image's first start loses its port
+  to the init server.
+- MongoDB branching keeps a `mongodb+srv` source URL given through connection
+  params.
+- On multi-pod targets, the operator now waits up to 30 seconds for every agent
+  to intercept a port before it confirms the subscription. This stops `mirrord
+  preview start` and `listen()` in `mirrord exec` from returning while some
+  pods still serve traffic directly.
+- `kubectl get previewsessions` no longer shows a stale status while a preview
+  starts again: after an operator restart the Ready column no longer reads
+  True, and once a `mirrord exec` session that paused a preview that was
+  running ends, the preview shows Waiting with Ready False from that moment
+  until its pods are ready, instead of Ready until the restarted preview
+  finished its setup; a preview that was idle when paused stays Idle. The Idle
+  column of the wide output also no longer keeps an old time once a preview
+  that was waking when the operator restarted is ready.
 
 ## 3.238.0 - 2026-11-25
 
