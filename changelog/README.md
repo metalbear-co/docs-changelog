@@ -13,6 +13,11 @@ description: >-
   The release changelog for the mirrord operator.
 ---
 
+## 3.239.1 - 2026-11-26
+
+Maintenance build.
+
+
 ## 3.239.0 - 2026-11-26
 
 
