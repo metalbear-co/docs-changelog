@@ -1,7 +1,7 @@
 ---
 title: mirrord Changelog
 date: 2026-10-21T00:00:00.000Z
-lastmod: 2026-11-25T00:00:00.000Z
+lastmod: 2026-11-26T00:00:00.000Z
 draft: false
 images: []
 weight: 100
@@ -13,6 +13,44 @@ tags:
 description: >-
   The release changelog for the mirrord CLI.
 ---
+
+## 3.292.0 - 2026-11-26
+
+
+### Added
+
+- Added `mirrord login --url`, `mirrord logout` and `mirrord whoami` for
+  operator SSO logins.
+- Added `mirrord preview wake`, which wakes every preview environment under a
+  key and waits until each one's pods are ready. It finds the key and kube
+  contexts the way `mirrord preview down` does, keeps the previews from idling
+  while it runs, and also wakes a multi-cluster preview's replicas. `--timeout`
+  sets how long to wait, by default the longest wake timeout of the previews,
+  and `--no-wait` returns once the operator has started waking every preview,
+  failing at `--timeout` if it never starts. A preview paused by a `mirrord
+  exec` session is skipped with a warning. Requires an operator that supports
+  waking previews.
+- Preview environments scale like their target with `feature.preview.autoscale`
+  and `preview.autoscale` in `mirrord-up.yaml`.
+- Run mirrord sessions and operator commands through an SSO login.
+- mirrord ls lists namespaces and targets through an SSO login.
+
+
+### Fixed
+
+- Fixed the agent failing with `EACCES` to open files behind symlinks
+  restricted by `fs.protected_symlinks`, such as a projected service account
+  token. [#5357](https://github.com/metalbear-co/mirrord/issues/5357)
+- Fixed database branch updates being rejected with "only `migrations` can
+  change after a branch is created" on Kubernetes 1.31 to 1.33 when a branch
+  option was unset.
+- `mirrord preview start`, `mirrord preview up` and `mirrord preview sync` no
+  longer crash when given a very large `--timeout` or
+  `feature.preview.creation_timeout_secs`; such a timeout now just waits for a
+  very long time.
+- `mirrord up` without a terminal, as IDEs run it, no longer hangs when a
+  service's target can't be inferred. It fails at once and names the service,
+  instead of waiting on a prompt nobody can answer.
 
 ## 3.291.2 - 2026-11-25
 
@@ -8159,16 +8197,16 @@ No significant changes.
 ### Added
 
 - aarch64 release binaries (no go support yet, no IntelliJ also).
-- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/f48f16eefe170dfa9d99b8b45754dd9cd95d0db6/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
+- mirrord-layer: Add [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/b99f923b18ccd768c9ec2dc120762a0225f622aa/mirrord-layer/src/file/filter.rs) that allows the user to include or exclude file paths (with regex support) for file operations.
 
 ### Changed
 
 - mirrord-layer: Improve error message when user tries to run a program with args without `--`.
 - Add tests for environment variables passed to KubeApi for authentication feature for cli credential fetch
 - Remove openssl/libssl dependency, cross compilation is easier now. (It wasn't needed/used)
-- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/f48f16eefe170dfa9d99b8b45754dd9cd95d0db6/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
+- mirrord-config: Changed the way [`fs`](https://github.com/metalbear-co/mirrord/blob/b99f923b18ccd768c9ec2dc120762a0225f622aa/mirrord-config/src/fs.rs) works: now it supports 2 modes `Simple` and `Advanced`,
   where `Simple` is similar to the old behavior (enables read-only, read-write, or disable file ops), and `Advanced`
-  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/f48f16eefe170dfa9d99b8b45754dd9cd95d0db6/mirrord-layer/src/file/filter.rs).
+  allows the user to specify include and exclude (regexes) filters for [`FileFilter`](https://github.com/metalbear-co/mirrord/blob/b99f923b18ccd768c9ec2dc120762a0225f622aa/mirrord-layer/src/file/filter.rs).
 - Lint `README` and update it for `--target` flag.
 - mirrord-layer: improve error message for invalid targets.
 
@@ -8209,7 +8247,7 @@ No significant changes.
 
 ### Added
 
-- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/f48f16eefe170dfa9d99b8b45754dd9cd95d0db6/TELEMETRY.md) for more information.
+- Telemetries, see [TELEMETRY.md](https://github.com/metalbear-co/mirrord/blob/b99f923b18ccd768c9ec2dc120762a0225f622aa/TELEMETRY.md) for more information.
 
 ### Changed
 
